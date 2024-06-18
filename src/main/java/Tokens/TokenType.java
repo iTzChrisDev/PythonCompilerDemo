@@ -1,18 +1,40 @@
 package Tokens;
 
 public enum TokenType {
+    // ESTRUCTURAS DE CONTROL
     IF,
     ELSE,
     ELIF,
     FOR,
     WHILE,
-    CLASS,
+    MATCH,
+    CASE,
+    // PALABRAS RESERVADAS
+    BOOLEAN_TRUE,
+    NONE,
+    BOOLEAN_FALSE,
+    AS,
     BREAK,
-    IS,
+    CLASS,
+    CONTINUE,
+    DEF,
+    DEL,
+    EXCEPT,
+    FINALLY,
+    FROM,
+    GLOBAL,
+    IMPORT,
     IN,
+    IS,
+    PASS,
+    RETURN,
+    PRINT,
+    TRY,
+    YIELD,
+    WITH,
+    INPUT,
     RANGE,
-    TRUE,
-    FALSE,
+    // OPERADORES
     SUMA,
     RESTA,
     MULTIPLICACION,
@@ -34,6 +56,7 @@ public enum TokenType {
     MULTIPLICACION_ASIGNACION,
     DIVISION_ASIGNACION,
     MODULO_ASIGNACION,
+    // DELIMITADORES
     PARENTESIS_APERTURA,
     PARENTESIS_CIERRE,
     LLAVE_APERTURA,
@@ -43,11 +66,11 @@ public enum TokenType {
     COMA,
     DOS_PUNTOS,
     PUNTO_Y_COMA,
+    // VARIABLES, TKN EXTRA...
     CADENA,
-    NUMERO,
+    ENTERO,
+    DECIMAL,
     IDENTIFICADOR,
     IDENTIFICADOR_CLASE,
-    BOOLEAN,
-    PRINT,
-    NULO
+    DESCONOCIDO
 }

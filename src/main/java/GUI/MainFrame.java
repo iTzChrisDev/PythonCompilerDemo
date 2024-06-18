@@ -1,13 +1,17 @@
 package GUI;
 
+import Files.FileManager;
 import GUI.CustomComponents.NumeroLinea;
 import LexerOperations.Lexer;
 import ParserOperations.Parser;
 import Tokens.Token;
 import java.awt.Component;
 import java.awt.Toolkit;
+import java.io.File;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -186,11 +190,33 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenFileActionPerformed
-
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("./src/main/java/Functions/Files"));
+        int seleccion = fileChooser.showOpenDialog(this);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            FileManager fm = new FileManager(file);
+            fm.cargarArchivo(txtCode);
+            tbModel.setRowCount(0);
+            jLabel1.setText("Output - " + fileChooser.getSelectedFile().getName());
+        }
     }//GEN-LAST:event_btnOpenFileActionPerformed
 
     private void btnAnalizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizeActionPerformed
+        String code = txtCode.getText();
+        if (!code.isBlank()) {
+            // ANALIZADOR LEXICO
+            lexer.analizeCode(code);
 
+            // ANALIZADOR SINTACTICO
+//            parser = new Parser(lexer.getTokenList(), txtConsole);
+//            parser.parseCode();
+
+            // LLENAR LEXEMAS Y TOKENS
+            fillTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Ningún codigo seleccionado", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnAnalizeActionPerformed
 
     public void fillTable() {
