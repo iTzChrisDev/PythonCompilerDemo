@@ -1,11 +1,18 @@
 package GUI;
 
 import GUI.CustomComponents.NumeroLinea;
-import Lexer.Lexer;
-import Parser.Parser;
+import LexerOperations.Lexer;
+import ParserOperations.Parser;
+import Tokens.Token;
+import java.awt.Component;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -25,10 +32,8 @@ public class MainFrame extends javax.swing.JFrame {
         tbModel = new DefaultTableModel();
         numLine = new NumeroLinea(txtCode);
         scrollCode.setRowHeaderView(numLine);
-    }
-
-    public void fillTable() {
-
+        lexer = new Lexer();
+        parser = new Parser();
     }
 
     @SuppressWarnings("unchecked")
@@ -170,7 +175,7 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,6 +192,40 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnAnalizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizeActionPerformed
 
     }//GEN-LAST:event_btnAnalizeActionPerformed
+
+    public void fillTable() {
+        tbModel = new DefaultTableModel();
+        tbModel.setRowCount(0);
+        tbModel.addColumn("Lexema");
+        tbModel.addColumn("Token");
+        tbModel.addColumn("Fila");
+        tbModel.addColumn("Columna");
+
+        for (Token lex : lexer.getTokenList()) {
+            tbModel.addRow(new Object[]{lex.getLexeme(), lex.getToken(), lex.getRow(), lex.getColumn()});
+        }
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tableTokens.setDefaultRenderer(Object.class, centerRenderer);
+
+        tableTokens.setModel(tbModel);
+        lexer.clearLexemes();
+        TableColumnModel columnModel = tableTokens.getColumnModel();
+        for (int column = 0; column < tableTokens.getColumnCount(); column++) {
+            TableColumn tableColumn = columnModel.getColumn(column);
+            int preferredWidth = 0;
+
+            for (int i = 0; i < tableTokens.getRowCount(); i++) {
+                TableCellRenderer cellRenderer = tableTokens.getCellRenderer(i, column);
+                Component c = tableTokens.prepareRenderer(cellRenderer, i, column);
+                int width = c.getPreferredSize().width + tableTokens.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
 
     /**
      * @param args the command line arguments
