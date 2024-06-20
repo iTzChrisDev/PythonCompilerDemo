@@ -37,7 +37,6 @@ public class MainFrame extends javax.swing.JFrame {
         numLine = new NumeroLinea(txtCode);
         scrollCode.setRowHeaderView(numLine);
         lexer = new Lexer();
-        parser = new Parser();
     }
 
     @SuppressWarnings("unchecked")
