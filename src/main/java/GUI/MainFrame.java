@@ -37,16 +37,6 @@ public class MainFrame extends javax.swing.JFrame {
         numLine = new NumeroLinea(txtCode);
         scrollCode.setRowHeaderView(numLine);
         lexer = new Lexer();
-        parser = new Parser();
-        txtCode.setText("class ciclo_simple:\n"
-                    + "    cont = 12\n"
-                    + "    while(True):\n"
-                    + "        if(cont != 123):\n"
-                    + "            print(\"Valido:\", cont)\n"
-                    + "            cont += 1\n"
-                    + "        else:\n"
-                    + "            print(\"Invalido:\", cont)\n"
-                    + "            break;");
     }
 
     @SuppressWarnings("unchecked")
@@ -215,7 +205,7 @@ public class MainFrame extends javax.swing.JFrame {
         String code = txtCode.getText();
         if (!code.isBlank()) {
             // ANALIZADOR LEXICO
-            
+
             lexer.analizeCode(code);
             // ANALIZADOR SINTACTICO
 //            parser = new Parser(lexer.getTokenList(), txtConsole);
