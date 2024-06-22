@@ -9,7 +9,7 @@ import java.util.Map;
 public class Lexer {
 
     private ArrayList<Token> tokenList;
-    private ArrayList<String> linesCode;
+    private ArrayList<String> linesCode, variableNames;
     private TokenType tokenType;
     private boolean stringActive;
     private int row, column;
@@ -17,6 +17,8 @@ public class Lexer {
     public Lexer() {
         tokenList = new ArrayList<>();
         linesCode = new ArrayList<>();
+        variableNames = new ArrayList<>();
+        tokenType = TokenType.DESCONOCIDO;
     }
 
     /**
@@ -28,15 +30,18 @@ public class Lexer {
         String aux = "";
         char codeChars[] = code.toCharArray();
         for (char c : codeChars) {
-            if (c == '\n') {
-                linesCode.add(aux);
-                aux = "";
-            } else if (c == '\t') {
-                for (int i = 0; i < 4; i++) {
-                    aux += " ";
+            switch (c) {
+                case '\n' -> {
+                    linesCode.add(aux);
+                    aux = "";
                 }
-            } else {
-                aux += c;
+                case '\t' -> {
+                    for (int i = 0; i < 4; i++) {
+                        aux += " ";
+                    }
+                }
+                default ->
+                    aux += c;
             }
         }
         linesCode.add(aux);
@@ -65,7 +70,78 @@ public class Lexer {
      * @param line La linea de codigo a analizar
      */
     private void analizeLine(String line) {
+        int index = 0;
+        String lexeme = "";
+        char[] chars = line.toCharArray();
+        stringActive = false;
 
+        // Separamos la linea en lexemas(palabras) para poder obtener el token de una manera mas sencilla
+        while (index != chars.length) {
+            // Ignoramos los comentarios en linea que comienzan con '#'
+            if (!stringActive && chars[index] == '#') {
+                break;
+            }
+
+            // Activamos y desactivamos la bandera de cadenas de caracteres
+            if (chars[index] == '"' || chars[index] == '\'') {
+                stringActive = !stringActive;
+            }
+
+            // Separamos los lexemas cada que encontramos los caracteres de espacio en blanco, delimitadores u operadores
+            if (!stringActive && (Character.isWhitespace(chars[index]) || isOperator(Character.toString(chars[index])) || isDelimiter(Character.toString(chars[index])))) {
+                if (!lexeme.isBlank()) {
+                    column = index + 1 - lexeme.length();
+                    tokenList.add(new Token(lexeme, tokenType, row, column));
+                    lexeme = "";
+                }
+                if (isOperator(Character.toString(chars[index]))) {
+                    if (isOperator(Character.toString(chars[index + 1]))) {
+                        column = index + 1;
+                        tokenList.add(new Token(Character.toString(chars[index]) + Character.toString(chars[index + 1]), tokenType, row, column));
+                        index++;
+                    } else {
+                        column = index + 1;
+                        tokenList.add(new Token(Character.toString(chars[index]), tokenType, row, column));
+                    }
+                } else if (isDelimiter(Character.toString(chars[index]))) {
+                    column = index + 1;
+                    tokenList.add(new Token(Character.toString(chars[index]), tokenType, row, column));
+                }
+            } else {
+                lexeme += chars[index];
+            }
+            index++;
+        }
+
+        // Se verifica una vez final por el salto de linea
+        if (!lexeme.isBlank()) {
+            column = index + 1 - lexeme.length();
+            tokenList.add(new Token(lexeme, tokenType, row, column));
+            lexeme = "";
+        }
+
+        // Asignación de tokens a cada lexema
+        int tknIndex = 0;
+        for (Token tkn : tokenList) {
+            if (isReservedWord(tkn.getLexeme())) {
+                tkn.setToken(tokenType);
+            } else if (isControlStructure(tkn.getLexeme())) {
+                tkn.setToken(tokenType);
+            } else if (isDelimiter(tkn.getLexeme())) {
+                tkn.setToken(tokenType);
+            } else if (isOperator(tkn.getLexeme())) {
+                tkn.setToken(tokenType);
+            } else if (isNumber(tkn.getLexeme())) {
+                tkn.setToken(tokenType);
+            } else if (isString(tkn.getLexeme())) {
+                tkn.setToken(tokenType);
+            } else if (isIdentifier(tkn.getLexeme(), tknIndex)) {
+                tkn.setToken(tokenType);
+            } else {
+                tkn.setToken(TokenType.DESCONOCIDO);
+            }
+            tknIndex++;
+        }
     }
 
     /**
@@ -113,6 +189,35 @@ public class Lexer {
     }
 
     /**
+     * Este método compara los valores anteriores o posteriores de un token en
+     * base a su posicion de modo que asi puede determinar el tipo de
+     * identificador
+     *
+     * @param tknIndex La posicion del token a comparar
+     * @return 'True' si el lexema actual es un identificador, 'False' si no lo
+     * es.
+     */
+    private boolean isIdentifier(String lexeme, int tknIndex) {
+        boolean val = false;
+        if (tknIndex >= 1 && tknIndex < lexeme.length()) {
+            if (tokenList.get(tknIndex - 1).getToken() == tokenType.CLASS) {
+                if (!variableNames.contains(lexeme)) {
+                    tokenType = TokenType.IDENTIFICADOR_CLASE;
+                    val = !val;
+                }
+            } else if (tokenList.get(tknIndex + 1).getLexeme().equals("=")) {
+                tokenType = TokenType.IDENTIFICADOR;
+                variableNames.add(lexeme);
+                val = !val;
+            } else if (variableNames.contains(lexeme)) {
+                tokenType = TokenType.IDENTIFICADOR;
+                val = !val;
+            }
+        }
+        return val;
+    }
+
+    /**
      * Este método verifica si el lexema se encuentra en alguno de los mapas de
      * tokens y establece su tipo de token una vez lo haya comparado.
      *
@@ -130,7 +235,8 @@ public class Lexer {
      * Este método verifica si el lexema actual es un conjunto de números.
      *
      * @param lexeme El lexema a comparar si es un valor númerico
-     * @return True si el lexema actual es un valor númerico, False si no lo es.
+     * @return 'True' si el lexema actual es un valor númerico, 'False' si no lo
+     * es.
      */
     private boolean isNumber(String lexeme) {
         int cont = 0, dots = 0;
@@ -142,32 +248,31 @@ public class Lexer {
                 cont++;
             }
         }
-        tokenType = (dots == 1 && cont == lexeme.length()) ? TokenType.DECIMAL : TokenType.ENTERO;
-        return (cont == lexeme.length()) && (dots <= 1);
+
+        boolean val;
+        if (dots == 1 && cont == lexeme.length()) {
+            tokenType = TokenType.DECIMAL;
+            val = true;
+        } else if (dots == 0 && cont == lexeme.length()) {
+            tokenType = TokenType.ENTERO;
+            val = true;
+        } else {
+            val = false;
+        }
+        return val;
     }
 
     /**
      * Este método verifica si un lexema es una cadena de caracteres.
      *
      * @param lexeme El lexema a verificar
-     * @param index el indice actual del proceso de analisis
-     * @return True si el lexema actual es una cadena de caracteres, False si no
-     * lo es.
+     * @return 'True' si el lexema actual es una cadena de caracteres, 'False'
+     * si no lo es.
      */
-    private boolean isString(String lexeme, int index) {
-        if (lexeme == null || lexeme.length() < 2) {
-            return false;
-        }
-        if (lexeme.charAt(0) == '"') {
-            stringActive = true;
-        }
-        if (lexeme.charAt(0) == '"' && lexeme.charAt(lexeme.length() - 1) == '"') {
-            index += lexeme.length();
-            stringActive = false;
-            return true;
-        } else {
-            return false;
-        }
+    private boolean isString(String lexeme) {
+        char[] aux = lexeme.toCharArray();
+        tokenType = (aux[0] == '"' && aux[aux.length - 1] == '"') || (aux[0] == '\'' && aux[aux.length - 1] == '\'') ? TokenType.CADENA : TokenType.DESCONOCIDO;
+        return (aux[0] == '"' && aux[aux.length - 1] == '"') || (aux[0] == '\'' && aux[aux.length - 1] == '\'');
     }
 
     /**
@@ -186,5 +291,7 @@ public class Lexer {
      */
     public void clearLexemes() {
         tokenList.clear();
+        linesCode.clear();
+        variableNames.clear();
     }
 }

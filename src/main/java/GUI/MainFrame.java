@@ -38,6 +38,15 @@ public class MainFrame extends javax.swing.JFrame {
         scrollCode.setRowHeaderView(numLine);
         lexer = new Lexer();
         parser = new Parser();
+        txtCode.setText("class ciclo_simple:\n"
+                    + "    cont = 12\n"
+                    + "    while(True):\n"
+                    + "        if(cont != 123):\n"
+                    + "            print(\"Valido:\", cont)\n"
+                    + "            cont += 1\n"
+                    + "        else:\n"
+                    + "            print(\"Invalido:\", cont)\n"
+                    + "            break;");
     }
 
     @SuppressWarnings("unchecked")
@@ -191,7 +200,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenFileActionPerformed
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File("./src/main/java/Functions/Files"));
+        fileChooser.setCurrentDirectory(new File("./src/main/java/Files/TestFiles"));
         int seleccion = fileChooser.showOpenDialog(this);
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -206,8 +215,8 @@ public class MainFrame extends javax.swing.JFrame {
         String code = txtCode.getText();
         if (!code.isBlank()) {
             // ANALIZADOR LEXICO
+            
             lexer.analizeCode(code);
-
             // ANALIZADOR SINTACTICO
 //            parser = new Parser(lexer.getTokenList(), txtConsole);
 //            parser.parseCode();
@@ -215,7 +224,8 @@ public class MainFrame extends javax.swing.JFrame {
             // LLENAR LEXEMAS Y TOKENS
             fillTable();
         } else {
-            JOptionPane.showMessageDialog(null, "Ningún codigo seleccionado", "Error!", JOptionPane.ERROR_MESSAGE);
+            jLabel1.setText("Output");
+            JOptionPane.showMessageDialog(null, "No hay código en el editor", "Atención!", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnAnalizeActionPerformed
 
