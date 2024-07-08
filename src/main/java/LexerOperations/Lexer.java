@@ -91,21 +91,21 @@ public class Lexer {
             if (!stringActive && (Character.isWhitespace(chars[index]) || isOperator(Character.toString(chars[index])) || isDelimiter(Character.toString(chars[index])))) {
                 if (!lexeme.isBlank()) {
                     column = index + 1 - lexeme.length();
-                    tokenList.add(new Token(lexeme, tokenType, row, column));
+                    tokenList.add(new Token(lexeme, TokenType.DESCONOCIDO, row, column));
                     lexeme = "";
                 }
                 if (isOperator(Character.toString(chars[index]))) {
                     if (isOperator(Character.toString(chars[index + 1]))) {
                         column = index + 1;
-                        tokenList.add(new Token(Character.toString(chars[index]) + Character.toString(chars[index + 1]), tokenType, row, column));
+                        tokenList.add(new Token(Character.toString(chars[index]) + Character.toString(chars[index + 1]), TokenType.DESCONOCIDO, row, column));
                         index++;
                     } else {
                         column = index + 1;
-                        tokenList.add(new Token(Character.toString(chars[index]), tokenType, row, column));
+                        tokenList.add(new Token(Character.toString(chars[index]), TokenType.DESCONOCIDO, row, column));
                     }
                 } else if (isDelimiter(Character.toString(chars[index]))) {
                     column = index + 1;
-                    tokenList.add(new Token(Character.toString(chars[index]), tokenType, row, column));
+                    tokenList.add(new Token(Character.toString(chars[index]), TokenType.DESCONOCIDO, row, column));
                 }
             } else {
                 lexeme += chars[index];
@@ -137,8 +137,8 @@ public class Lexer {
                 tkn.setToken(tokenType);
             } else if (isIdentifier(tkn.getLexeme(), tknIndex)) {
                 tkn.setToken(tokenType);
-            } else {
-                tkn.setToken(TokenType.DESCONOCIDO);
+            } else if (isClassIdentifier(tkn.getLexeme(), tknIndex)) {
+                tkn.setToken(tokenType);
             }
             tknIndex++;
         }
@@ -193,19 +193,15 @@ public class Lexer {
      * base a su posicion de modo que asi puede determinar el tipo de
      * identificador
      *
+     * @param lexeme El lexema a comparar
      * @param tknIndex La posicion del token a comparar
      * @return 'True' si el lexema actual es un identificador, 'False' si no lo
      * es.
      */
     private boolean isIdentifier(String lexeme, int tknIndex) {
         boolean val = false;
-        if (tknIndex >= 1 && tknIndex < lexeme.length()) {
-            if (tokenList.get(tknIndex - 1).getToken() == tokenType.CLASS) {
-                if (!variableNames.contains(lexeme)) {
-                    tokenType = TokenType.IDENTIFICADOR_CLASE;
-                    val = !val;
-                }
-            } else if (tokenList.get(tknIndex + 1).getLexeme().equals("=")) {
+        try {
+            if (tokenList.get(tknIndex + 1).getLexeme().equals("=")) {
                 tokenType = TokenType.IDENTIFICADOR;
                 variableNames.add(lexeme);
                 val = !val;
@@ -213,6 +209,36 @@ public class Lexer {
                 tokenType = TokenType.IDENTIFICADOR;
                 val = !val;
             }
+        } catch (IndexOutOfBoundsException e) {
+
+        }
+        return val;
+    }
+
+    /**
+     * Este método compara los valores anteriores o posteriores de un token en
+     * base a su posicion de modo que asi puede determinar si es un
+     * identificador de clase
+     *
+     * @param lexeme El lexema a comparar
+     * @param tknIndex La posicion del token a comparar
+     * @return 'True' si el lexema actual es un identificador de clase, 'False' si no lo
+     * es.
+     */
+    private boolean isClassIdentifier(String lexeme, int tknIndex) {
+        boolean val = false;
+        try {
+            if (tokenList.get(tknIndex - 1).getToken() == TokenType.CLASS) {
+                if (!variableNames.contains(lexeme)) {
+                    tokenType = TokenType.IDENTIFICADOR_CLASE;
+                    val = !val;
+                }
+            } else if (tokenList.get(tknIndex - 1).getToken() == TokenType.FOR) {
+                tokenType = TokenType.IDENTIFICADOR;
+                val = !val;
+            }
+        } catch (IndexOutOfBoundsException e) {
+
         }
         return val;
     }
