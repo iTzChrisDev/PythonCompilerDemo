@@ -205,14 +205,13 @@ public class MainFrame extends javax.swing.JFrame {
         String code = txtCode.getText();
         if (!code.isBlank()) {
             // ANALIZADOR LEXICO
-
+            lexer.clearLexemes();
             lexer.analizeCode(code);
-            // ANALIZADOR SINTACTICO
-//            parser = new Parser(lexer.getTokenList(), txtConsole);
-//            parser.parseCode();
-
-            // LLENAR LEXEMAS Y TOKENS
             fillTable();
+
+            // ANALIZADOR SINTACTICO
+            parser = new Parser(lexer.getTokenList(), txtConsole);
+            parser.parseCode();
         } else {
             jLabel1.setText("Output");
             JOptionPane.showMessageDialog(null, "No hay código en el editor", "Atención!", JOptionPane.INFORMATION_MESSAGE);
@@ -236,7 +235,7 @@ public class MainFrame extends javax.swing.JFrame {
         tableTokens.setDefaultRenderer(Object.class, centerRenderer);
 
         tableTokens.setModel(tbModel);
-        lexer.clearLexemes();
+
         TableColumnModel columnModel = tableTokens.getColumnModel();
         for (int column = 0; column < tableTokens.getColumnCount(); column++) {
             TableColumn tableColumn = columnModel.getColumn(column);

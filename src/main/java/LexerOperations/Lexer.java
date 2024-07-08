@@ -139,6 +139,10 @@ public class Lexer {
                 tkn.setToken(tokenType);
             } else if (isClassIdentifier(tkn.getLexeme(), tknIndex)) {
                 tkn.setToken(tokenType);
+            } else if (tkn.getToken() == TokenType.DESCONOCIDO) {
+                if (variableNames.contains(tkn.getLexeme())) {
+                    tkn.setToken(TokenType.IDENTIFICADOR);
+                }
             }
             tknIndex++;
         }
@@ -222,8 +226,8 @@ public class Lexer {
      *
      * @param lexeme El lexema a comparar
      * @param tknIndex La posicion del token a comparar
-     * @return 'True' si el lexema actual es un identificador de clase, 'False' si no lo
-     * es.
+     * @return 'True' si el lexema actual es un identificador de clase, 'False'
+     * si no lo es.
      */
     private boolean isClassIdentifier(String lexeme, int tknIndex) {
         boolean val = false;
