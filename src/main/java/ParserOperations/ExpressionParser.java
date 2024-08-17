@@ -13,56 +13,71 @@ public class ExpressionParser {
         tool = new Utilities();
     }
 
-    public void parseIf(ArrayList<Token> tokenList, int index, int currentRow, JTextArea console) {
-        if (tool.verifyToken(TokenType.IF, tokenList, index)) {
-            index++;
-            if (isSimpleExpression(tokenList, index, currentRow, console)) {
-                System.out.println("IF SIMPLE");
-            }
-        }
-    }
-
-    private boolean isSimpleExpression(ArrayList<Token> tokenList, int index, int currentRow, JTextArea console) {
+    public boolean isSimpleExpression(ArrayList<Token> tokenList, int currentRow, JTextArea console) {
         boolean result = false;
-        if (tool.verifyToken(TokenType.PARENTESIS_APERTURA, tokenList, index)) {
-            index++;
-            if (tool.isValueToken(tokenList.get(index))) {
-                index++;
-                if (tool.isRelationalOperator(tokenList.get(index))) {
-                    index++;
-                    if (tool.isValueToken(tokenList.get(index))) {
-                        index++;
-                        if (tool.verifyToken(TokenType.PARENTESIS_CIERRE, tokenList, index)) {
-                            // FIN
-                            result = true;
-                        } else {
-                            tool.showError("Se esperaba ')'", currentRow, console);
-                        }
-                    } else {
-                        tool.showError("Se esperaba valor", currentRow, console);
-                    }
+
+        // Manejo del operador NOT
+        if (tool.verifyToken(TokenType.NOT, tokenList)) {
+            tool.incrementIndex();
+        }
+
+        if (tool.verifyToken(TokenType.PARENTESIS_APERTURA, tokenList)) {
+            tool.incrementIndex();
+
+            result = isCompoundExpression(tokenList, currentRow, console);
+            if (result) {
+                tool.setIndex(skipExpression(tokenList));// Avanzar el índice hasta el cierre de paréntesis
+                if (tool.verifyToken(TokenType.PARENTESIS_CIERRE, tokenList)) {
+                    tool.incrementIndex();
+                    result = true;
                 } else {
-                    tool.showError("Se esperaba operador relacional", currentRow, console);
+                    tool.showError("Se esperaba ')'", currentRow, console);
+                    result = false;
                 }
             } else {
-                tool.showError("Se esperaba valor", currentRow, console);
+                tool.showError("Expresión dentro de paréntesis no válida", currentRow, console);
+                result = false;
             }
-        } else if (tool.isValueToken(tokenList.get(index))) {
-            index++;
-            if (tool.isRelationalOperator(tokenList.get(index))) {
-                index++;
-                if (tool.isValueToken(tokenList.get(index))) {
-                    // FIN
+        } else if (tool.isValueToken(tokenList.get(tool.getIndex()))) {
+            tool.incrementIndex();
+            if (tool.isRelationalOperator(tokenList.get(tool.getIndex()))) {
+                tool.incrementIndex();
+
+                if (tool.isValueToken(tokenList.get(tool.getIndex()))) {
+                    tool.incrementIndex();
                     result = true;
                 } else {
                     tool.showError("Se esperaba valor", currentRow, console);
+                    result = false;
                 }
             } else {
-                tool.showError("Se esperaba un operador relacional", currentRow, console);
+                tool.showError("Se esperaba operador relacional", currentRow, console);
+                result = false;
             }
         } else {
-            tool.showError("Se esperaba expresión condicional", currentRow, console);
+            tool.showError("Se esperaba expresión condicional o valor", currentRow, console);
         }
         return result;
+    }
+
+    public boolean isCompoundExpression(ArrayList<Token> tokenList, int currentRow, JTextArea console) {
+        boolean result = isSimpleExpression(tokenList, currentRow, console);
+        while (result && (tool.verifyToken(TokenType.AND, tokenList)
+                || tool.verifyToken(TokenType.OR, tokenList))) {
+            tool.incrementIndex();
+            result = isSimpleExpression(tokenList, currentRow, console);
+            if (!result) {
+                tool.showError("Expresión después de operador lógico no válida", currentRow, console);
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    private int skipExpression(ArrayList<Token> tokenList) {
+        while (tool.getIndex() < tokenList.size() && !tool.verifyToken(TokenType.PARENTESIS_CIERRE, tokenList)) {
+            tool.incrementIndex();
+        }
+        return tool.getIndex();
     }
 }

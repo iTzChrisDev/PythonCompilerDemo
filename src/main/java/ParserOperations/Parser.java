@@ -1,7 +1,6 @@
 package ParserOperations;
 
 import Tokens.Token;
-import Tokens.TokenType;
 import java.util.ArrayList;
 import javax.swing.JTextArea;
 
@@ -9,68 +8,44 @@ public class Parser {
 
     private ArrayList<Token> tokenList;
     private JTextArea console;
-    private int index, currentRow;
+    private int currentRow;
     private Utilities tool;
-    private ExpressionParser expParser;
+    private ConditionalParser conditionalParser;
+    private LoopParser loopParser;
 
     public Parser(ArrayList<Token> tokenList, JTextArea console) {
         this.tokenList = tokenList;
         this.console = console;
         tool = new Utilities();
-        expParser = new ExpressionParser();
+        conditionalParser = new ConditionalParser();
+        loopParser = new LoopParser();
     }
 
     public void parseCode() {
-        index = 0;
+        tool.setIndex(0);
         console.setText("");
-        while (index < tokenList.size()) {
-            Token tkn = tokenList.get(index);
+        while (tool.getIndex() < tokenList.size()) {
+            Token tkn = tokenList.get(tool.getIndex());
             currentRow = tkn.getRow();
             switch (tkn.getToken()) {
                 case IDENTIFICADOR:
-                    parseAssignment();
+                    conditionalParser.parseAssignment(tokenList, currentRow, console);
+                    // PENDIENTE 
                     break;
                 case CLASS:
-                    parseClassDeclaration();
+                    conditionalParser.parseClassDeclaration(tokenList, currentRow, console);
                     break;
                 case IF:
-                    expParser.parseIf(tokenList, index, currentRow, console);
+                    conditionalParser.parseIf(tokenList, currentRow, console);
+                    break;
+                case WHILE:
+                    loopParser.parseWhile(tokenList, currentRow, console);
+                    break;
+                case FOR:
+                    loopParser.parseFor(tokenList, currentRow, console);
                     break;
             }
-            index++;
+            tool.incrementIndex();
         }
     }
-
-    private void parseClassDeclaration() {
-        if (tool.verifyToken(TokenType.CLASS, tokenList, index)) {
-            index++;
-            if (tool.verifyToken(TokenType.IDENTIFICADOR_CLASE, tokenList, index)) {
-                index++;
-                if (tool.verifyToken(TokenType.DOS_PUNTOS, tokenList, index)) {
-                    //Fin del arbol sintáctico
-                } else {
-                    tool.showError("Se esperaba ':'", currentRow, console);
-                }
-            } else {
-                tool.showError("Se esperaba identificador de clase", currentRow, console);
-            }
-        }
-    }
-
-    private void parseAssignment() {
-        if (tool.verifyToken(TokenType.IDENTIFICADOR, tokenList, index)) {
-            index++;
-            if (tool.isAssignment(tokenList.get(index))) {
-                index++;
-                if (tool.isValueToken(tokenList.get(index))) { //CHECAR ERROR DE DESBORDAMIENTO DE INDEX
-                    // Fin del arbol sintáctico
-                } else {
-                    tool.showError("Se esperaba un valor", currentRow, console);
-                }
-            } else {
-                tool.showError("Se esperaba '='", currentRow, console);
-            }
-        }
-    }
-
 }

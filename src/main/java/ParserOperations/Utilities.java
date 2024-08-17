@@ -7,7 +7,21 @@ import javax.swing.JTextArea;
 
 public class Utilities {
 
-    protected boolean verifyToken(TokenType tkn, ArrayList<Token> tokenList, int index) {
+    private static int index = 0;
+
+    public static void setIndex(int newIndex) {
+        index = newIndex;
+    }
+    
+    public static int getIndex() {
+        return index;
+    }
+
+    public static void incrementIndex() {
+        index++;
+    }
+
+    protected boolean verifyToken(TokenType tkn, ArrayList<Token> tokenList) {
         return index < tokenList.size() && tokenList.get(index).getToken() == tkn;
     }
 
