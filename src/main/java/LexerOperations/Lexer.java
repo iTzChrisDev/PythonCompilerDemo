@@ -95,13 +95,15 @@ public class Lexer {
                     lexeme = "";
                 }
                 if (isOperator(Character.toString(chars[index]))) {
-                    if (isOperator(Character.toString(chars[index + 1]))) {
-                        column = index + 1;
-                        tokenList.add(new Token(Character.toString(chars[index]) + Character.toString(chars[index + 1]), TokenType.DESCONOCIDO, row, column));
-                        index++;
-                    } else {
-                        column = index + 1;
-                        tokenList.add(new Token(Character.toString(chars[index]), TokenType.DESCONOCIDO, row, column));
+                    if (index != tokenList.size() - 1) {
+                        if (isOperator(Character.toString(chars[index + 1]))) {
+                            column = index + 1;
+                            tokenList.add(new Token(Character.toString(chars[index]) + Character.toString(chars[index + 1]), TokenType.DESCONOCIDO, row, column));
+                            index++;
+                        } else {
+                            column = index + 1;
+                            tokenList.add(new Token(Character.toString(chars[index]), TokenType.DESCONOCIDO, row, column));
+                        }
                     }
                 } else if (isDelimiter(Character.toString(chars[index]))) {
                     column = index + 1;

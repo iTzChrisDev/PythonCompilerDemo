@@ -10,10 +10,14 @@ public class Parser {
     private ArrayList<Token> tokenList;
     private JTextArea console;
     private int index, currentRow;
+    private Utilities tool;
+    private ExpressionParser expParser;
 
     public Parser(ArrayList<Token> tokenList, JTextArea console) {
         this.tokenList = tokenList;
         this.console = console;
+        tool = new Utilities();
+        expParser = new ExpressionParser();
     }
 
     public void parseCode() {
@@ -29,77 +33,44 @@ public class Parser {
                 case CLASS:
                     parseClassDeclaration();
                     break;
+                case IF:
+                    expParser.parseIf(tokenList, index, currentRow, console);
+                    break;
             }
             index++;
         }
     }
 
     private void parseClassDeclaration() {
-        if (verifyToken(TokenType.CLASS)) {
+        if (tool.verifyToken(TokenType.CLASS, tokenList, index)) {
             index++;
-            if (verifyToken(TokenType.IDENTIFICADOR_CLASE)) {
+            if (tool.verifyToken(TokenType.IDENTIFICADOR_CLASE, tokenList, index)) {
                 index++;
-                if (verifyToken(TokenType.DOS_PUNTOS)) {
+                if (tool.verifyToken(TokenType.DOS_PUNTOS, tokenList, index)) {
                     //Fin del arbol sintáctico
                 } else {
-                    showError("Se esperaba ':'");
+                    tool.showError("Se esperaba ':'", currentRow, console);
                 }
             } else {
-                showError("Se esperaba identificador de clase");
+                tool.showError("Se esperaba identificador de clase", currentRow, console);
             }
         }
     }
 
     private void parseAssignment() {
-        if (verifyToken(TokenType.IDENTIFICADOR)) {
+        if (tool.verifyToken(TokenType.IDENTIFICADOR, tokenList, index)) {
             index++;
-            if (isAssignment(tokenList.get(index))) {
+            if (tool.isAssignment(tokenList.get(index))) {
                 index++;
-                if (isValueToken(tokenList.get(index))) {
+                if (tool.isValueToken(tokenList.get(index))) { //CHECAR ERROR DE DESBORDAMIENTO DE INDEX
                     // Fin del arbol sintáctico
                 } else {
-                    showError("Se esperaba un valor");
+                    tool.showError("Se esperaba un valor", currentRow, console);
                 }
             } else {
-                showError("Se esperaba '='");
+                tool.showError("Se esperaba '='", currentRow, console);
             }
         }
     }
 
-    private boolean verifyToken(TokenType tkn) {
-        return index < tokenList.size() && tokenList.get(index).getToken() == tkn;
-    }
-
-    private boolean isAssignment(Token tkn) {
-        return tkn.getToken().equals(TokenType.ASIGNACION)
-                || tkn.getToken().equals(TokenType.SUMA_ASIGNACION)
-                || tkn.getToken().equals(TokenType.RESTA_ASIGNACION)
-                || tkn.getToken().equals(TokenType.DIVISION_ASIGNACION)
-                || tkn.getToken().equals(TokenType.MODULO_ASIGNACION)
-                || tkn.getToken().equals(TokenType.MULTIPLICACION_ASIGNACION);
-    }
-
-    private boolean isValueToken(Token tkn) {
-        // Verificar si el token es un valor válido
-        return tkn.getToken().equals(TokenType.IDENTIFICADOR)
-                || tkn.getToken().equals(TokenType.ENTERO)
-                || tkn.getToken().equals(TokenType.DECIMAL)
-                || tkn.getToken().equals(TokenType.CADENA)
-                || tkn.getToken().equals(TokenType.BOOLEAN_FALSE)
-                || tkn.getToken().equals(TokenType.BOOLEAN_TRUE);
-    }
-
-    private boolean isRelationalOperator(Token tkn) {
-        // Verificar si el token es un operador relacional
-        return tkn.getToken().equals(TokenType.IGUALDAD)
-                || tkn.getToken().equals(TokenType.MAYOR_QUE)
-                || tkn.getToken().equals(TokenType.MENOR_QUE)
-                || tkn.getToken().equals(TokenType.MAYOR_IGUAL_QUE)
-                || tkn.getToken().equals(TokenType.MENOR_IGUAL_QUE)
-                || tkn.getToken().equals(TokenType.DIFERENCIA);
-    }
-
-    private void showError(String errorMessage) {
-        console.setText(console.getText() + errorMessage + " en la linea " + currentRow + "\n");
-    }
 }
