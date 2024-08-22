@@ -6,47 +6,28 @@ import javax.swing.JTextArea;
 
 public class Parser {
 
-    private ArrayList<Token> tokenList;
-    private JTextArea console;
-    private int currentRow;
     private Utilities tool;
-    private ConditionalParser conditionalParser;
-    private LoopParser loopParser;
-    private ReservedParser resParser;
+    private CompoundStatements comp;
 
     public Parser(ArrayList<Token> tokenList, JTextArea console) {
-        this.tokenList = tokenList;
-        this.console = console;
         tool = new Utilities();
-        conditionalParser = new ConditionalParser();
-        loopParser = new LoopParser();
-        resParser = new ReservedParser();
+        comp = new CompoundStatements();
+        tool.setIndex(0);
+        tool.setTokenList(tokenList);
+        tool.setConsole(console);
+        tool.clearConsole();
     }
 
     public void parseCode() {
-        tool.setIndex(0);
-        console.setText("");
-        while (tool.getIndex() < tokenList.size()) {
-            Token tkn = tokenList.get(tool.getIndex());
-            currentRow = tkn.getRow();
+        while (tool.getIndex() < tool.getTokenList().size()) {
+            Token tkn = tool.getTokenList().get(tool.getIndex());
             switch (tkn.getToken()) {
-                case IDENTIFICADOR:
-                    resParser.parseAssignment(tokenList, currentRow, console);
-                    break;
-                case CLASS:
-                    resParser.parseClassDeclaration(tokenList, currentRow, console);
-                    break;
                 case IF:
-                    conditionalParser.parseIf(tokenList, currentRow, console);
-                    break;
-                case WHILE:
-                    loopParser.parseWhile(tokenList, currentRow, console);
-                    break;
-                case FOR:
-                    loopParser.parseFor(tokenList, currentRow, console);
+                    comp.isIfStatement();
                     break;
             }
             tool.incrementIndex();
         }
     }
+
 }

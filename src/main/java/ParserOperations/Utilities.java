@@ -8,25 +8,15 @@ import javax.swing.JTextArea;
 public class Utilities {
 
     private static int index = 0;
+    private static ArrayList<Token> tokenList;
+    private static JTextArea console;
 
-    public static void setIndex(int newIndex) {
-        index = newIndex;
-    }
-    
-    public static int getIndex() {
-        return index;
-    }
-
-    public static void incrementIndex() {
-        index++;
-    }
-
-    protected boolean verifyToken(TokenType tkn, ArrayList<Token> tokenList) {
+    protected boolean verifyToken(TokenType tkn) {
         return index < tokenList.size() && tokenList.get(index).getToken() == tkn;
     }
 
-    protected void showError(String errorMessage, int currentRow, JTextArea console) {
-        console.setText(console.getText() + errorMessage + " en la linea " + currentRow + "\n");
+    protected void showError(String errorMessage) {
+        console.setText(console.getText() + errorMessage + " en la linea " + tokenList.get(index).getRow() + "\n");
     }
 
     protected boolean isAssignment(Token tkn) {
@@ -56,5 +46,45 @@ public class Utilities {
                 || tkn.getToken().equals(TokenType.MAYOR_IGUAL_QUE)
                 || tkn.getToken().equals(TokenType.MENOR_IGUAL_QUE)
                 || tkn.getToken().equals(TokenType.DIFERENCIA);
+    }
+
+    protected static void setIndex(int newIndex) {
+        Utilities.index = newIndex;
+    }
+
+    protected static int getIndex() {
+        return index;
+    }
+
+    protected static void setTokenList(ArrayList<Token> newTokenList) {
+        Utilities.tokenList = newTokenList;
+    }
+
+    protected static ArrayList<Token> getTokenList() {
+        return tokenList;
+    }
+
+    protected static Token getCurrentToken() {
+        return tokenList.get(index);
+    }
+
+    public static JTextArea getConsole() {
+        return console;
+    }
+
+    public static void setConsole(JTextArea console) {
+        Utilities.console = console;
+    }
+
+    public static void clearConsole() {
+        console.setText("");
+    }
+
+    protected static void incrementIndex() {
+        index++;
+    }
+
+    protected static void decrementIndex() {
+        index--;
     }
 }
