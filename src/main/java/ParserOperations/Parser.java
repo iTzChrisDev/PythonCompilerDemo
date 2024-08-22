@@ -12,6 +12,7 @@ public class Parser {
     private Utilities tool;
     private ConditionalParser conditionalParser;
     private LoopParser loopParser;
+    private ReservedParser resParser;
 
     public Parser(ArrayList<Token> tokenList, JTextArea console) {
         this.tokenList = tokenList;
@@ -19,6 +20,7 @@ public class Parser {
         tool = new Utilities();
         conditionalParser = new ConditionalParser();
         loopParser = new LoopParser();
+        resParser = new ReservedParser();
     }
 
     public void parseCode() {
@@ -29,11 +31,10 @@ public class Parser {
             currentRow = tkn.getRow();
             switch (tkn.getToken()) {
                 case IDENTIFICADOR:
-                    conditionalParser.parseAssignment(tokenList, currentRow, console);
-                    // PENDIENTE 
+                    resParser.parseAssignment(tokenList, currentRow, console);
                     break;
                 case CLASS:
-                    conditionalParser.parseClassDeclaration(tokenList, currentRow, console);
+                    resParser.parseClassDeclaration(tokenList, currentRow, console);
                     break;
                 case IF:
                     conditionalParser.parseIf(tokenList, currentRow, console);
