@@ -5,25 +5,21 @@ import Tokens.TokenType;
 public class SimpleStatements {
 
     private Utilities tool;
+    private Assignments assigns;
 
     public SimpleStatements() {
         tool = new Utilities();
+        assigns = new Assignments();
     }
 
     public boolean isSimpleStatement() {
-        if (isAssignment() || isReturnStatement() || isImportStatement()
+        if (assigns.isAssignment() || isReturnStatement() || isImportStatement()
                 || tool.verifyToken(TokenType.PASS) || tool.verifyToken(TokenType.BREAK)
                 || tool.verifyToken(TokenType.CONTINUE)) {
             return true;
         } else {
             return false;
         }
-    }
-
-    public boolean isAssignment() {
-        boolean flag = false;
-        // TO-DO
-        return flag;
     }
 
     public boolean isReturnStatement() {
