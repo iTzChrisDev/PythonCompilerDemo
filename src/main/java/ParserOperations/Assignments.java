@@ -10,7 +10,7 @@ public class Assignments {
     }
 
     public boolean isAssignment() {
-        if (isArithmeticOperation() || isAugAssign() || isValueAssign() || isDataCollection() || isCallFunction()) {
+        if (isArithmeticOperation() || isValueAssign() || isDataCollection() || isCallFunction()) {
             return true;
         } else {
             return false;
@@ -19,7 +19,7 @@ public class Assignments {
 
     public boolean isArithmeticOperation() {
         boolean flag = false;
-        //TO-DO
+        // TO-DO
         return flag;
     }
 
@@ -31,29 +31,24 @@ public class Assignments {
                 tool.incrementIndex();
                 if (tool.isValueToken(tool.getCurrentToken())) {
                     flag = true;
+                    System.out.println("VARIABLE DECLARADA");
+                    tool.incrementIndex();
+
                 } else {
                     tool.showError("Se esperaba valor");
                 }
-            } else {
-                tool.showError("La variable no se encuentra definida");
-            }
-        }
-        return flag;
-    }
-
-    public boolean isAugAssign() {
-        boolean flag = false;
-        if (tool.verifyToken(TokenType.IDENTIFICADOR)) {
-            tool.incrementIndex();
-            if (tool.isAssignment(tool.getCurrentToken())) {
+            } else if (tool.isAssignment(tool.getCurrentToken())) {
                 tool.incrementIndex();
                 if (tool.isValueToken(tool.getCurrentToken())) {
+                    System.out.println("VARIABLE AUGASSIGN");
                     flag = true;
+                    tool.incrementIndex();
+
                 } else {
                     tool.showError("Se esperaba valor");
                 }
             } else {
-                tool.showError("Se esperaba operador de asignacion");
+                tool.showError("Se esperaba operador");
             }
         }
         return flag;
@@ -76,9 +71,10 @@ public class Assignments {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         tool.incrementIndex();
                         if (checkValuesList()) {
-                            tool.incrementIndex();
+                            // tool.incrementIndex();
                             if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                                 flag = true;
+                                System.out.println("ESTRUCTURA DE DATOS DECLARADA");
                             } else {
                                 tool.showError("Se esperaba ')'");
                             }
@@ -98,9 +94,10 @@ public class Assignments {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         tool.incrementIndex();
                         if (checkValuesList()) {
-                            tool.incrementIndex();
+                            // tool.incrementIndex();
                             if (tool.verifyToken(TokenType.LLAVE_CIERRE)) {
                                 flag = true;
+                                System.out.println("ESTRUCTURA DE DATOS DECLARADA");
                             } else {
                                 tool.showError("Se esperaba '}'");
                             }
@@ -120,9 +117,10 @@ public class Assignments {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         tool.incrementIndex();
                         if (checkValuesList()) {
-                            tool.incrementIndex();
+                            // tool.incrementIndex();
                             if (tool.verifyToken(TokenType.CORCHETE_CIERRE)) {
                                 flag = true;
+                                System.out.println("ESTRUCTURA DE DATOS DECLARADA");
                             } else {
                                 tool.showError("Se esperaba ']'");
                             }

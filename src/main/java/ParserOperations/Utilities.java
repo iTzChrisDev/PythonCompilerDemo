@@ -7,7 +7,7 @@ import javax.swing.JTextArea;
 
 public class Utilities {
 
-    private static int index = 0;
+    private static int index, currentRow;
     private static ArrayList<Token> tokenList;
     private static JTextArea console;
 
@@ -16,12 +16,11 @@ public class Utilities {
     }
 
     protected void showError(String errorMessage) {
-        console.setText(console.getText() + errorMessage + " en la linea " + tokenList.get(index).getRow() + "\n");
+        console.setText(console.getText() + errorMessage + " en la linea " + currentRow + "\n");
     }
 
     protected boolean isAssignment(Token tkn) {
-        return tkn.getToken().equals(TokenType.ASIGNACION)
-                || tkn.getToken().equals(TokenType.SUMA_ASIGNACION)
+        return tkn.getToken().equals(TokenType.SUMA_ASIGNACION)
                 || tkn.getToken().equals(TokenType.RESTA_ASIGNACION)
                 || tkn.getToken().equals(TokenType.DIVISION_ASIGNACION)
                 || tkn.getToken().equals(TokenType.MODULO_ASIGNACION)
@@ -34,8 +33,7 @@ public class Utilities {
                 || tkn.getToken().equals(TokenType.ENTERO)
                 || tkn.getToken().equals(TokenType.DECIMAL)
                 || tkn.getToken().equals(TokenType.CADENA)
-                || tkn.getToken().equals(TokenType.BOOLEAN_FALSE)
-                || tkn.getToken().equals(TokenType.BOOLEAN_TRUE);
+                || tkn.getToken().equals(TokenType.BOOLEAN);
     }
 
     protected boolean isRelationalOperator(Token tkn) {
@@ -81,10 +79,17 @@ public class Utilities {
     }
 
     protected static void incrementIndex() {
-        index++;
+        if (index < tokenList.size() - 1) {
+            index++;
+            System.out.println(tokenList.get(index));
+        }
     }
 
     protected static void decrementIndex() {
         index--;
+    }
+
+    public static void setCurrentRow(int currentRow) {
+        Utilities.currentRow = currentRow;
     }
 }

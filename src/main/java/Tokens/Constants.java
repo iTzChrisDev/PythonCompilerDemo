@@ -6,9 +6,9 @@ import java.util.Map;
 public class Constants {
 
     public static final Map<String, TokenType> RESERVED_WORDS = Map.ofEntries(
-            Map.entry("False", TokenType.BOOLEAN_FALSE),
+            Map.entry("False", TokenType.BOOLEAN),
+            Map.entry("True", TokenType.BOOLEAN),
             Map.entry("None", TokenType.NONE),
-            Map.entry("True", TokenType.BOOLEAN_TRUE),
             Map.entry("as", TokenType.AS),
             Map.entry("break", TokenType.BREAK),
             Map.entry("class", TokenType.CLASS),

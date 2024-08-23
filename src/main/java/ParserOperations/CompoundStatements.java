@@ -13,6 +13,7 @@ public class CompoundStatements {
     }
 
     public boolean isCompoundStatement() {
+        tool.setCurrentRow(tool.getCurrentToken().getRow());
         if (isFunctionDef() || isClassDeclaration() || isIfStatement() || isForStatement()
                 || isWhileStatement() || isMatchStatement() || isTryStatement()) {
             return true;
@@ -24,6 +25,21 @@ public class CompoundStatements {
     public boolean isFunctionDef() {
         boolean flag = false;
         // TO-DO
+        if (tool.verifyToken(TokenType.DEF)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.IDENTIFICADOR_FUNCION)) {
+                tool.incrementIndex();
+                if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
+                    tool.incrementIndex();
+                    if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
+                        tool.incrementIndex();
+                        if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                            tool.incrementIndex();
+                        }
+                    }
+                }
+            }
+        }
         return flag;
     }
 
@@ -35,6 +51,9 @@ public class CompoundStatements {
                 tool.incrementIndex();
                 if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                     // Fin del arbol sintáctico
+                    flag = true;
+                    tool.incrementIndex();
+                    System.out.println("CLASS CORRECTO");
                 } else {
                     tool.showError("Se esperaba ':'");
                 }
@@ -47,27 +66,62 @@ public class CompoundStatements {
 
     public boolean isIfStatement() {
         boolean flag = false;
-
-        // Verificar si el token actual es 'IF'
         if (tool.verifyToken(TokenType.IF)) {
             tool.incrementIndex();
             // Verificar si la expresión condicional es válida
-            if (expParser.isCompoundExpression()) {
+            if (expParser.isValidExpression()) {
                 // Verificar el token siguiente
                 if (tool.getIndex() < tool.getTokenList().size()) {
                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                        flag = true; // La sentencia IF es correcta
+                        flag = true;
+                        tool.incrementIndex();
                         System.out.println("IF CORRECTO");
                     } else if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                         tool.showError("No se encontró '('");
                     } else {
                         tool.showError("Se esperaban ':'");
                     }
-                } else {
-                    tool.showError("Se esperaban ':'");
                 }
             } else {
                 tool.showError("Expresión condicional no válida");
+            }
+        }
+        return flag;
+    }
+
+    public boolean isElifStatement() {
+        boolean flag = false;
+        if (tool.verifyToken(TokenType.ELIF)) {
+            tool.incrementIndex();
+            // Verificar si la expresión condicional es válida
+            if (expParser.isValidExpression()) {
+                // Verificar el token siguiente
+                if (tool.getIndex() < tool.getTokenList().size()) {
+                    if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                        flag = true;
+                        tool.incrementIndex();
+                        System.out.println("ELIF CORRECTO");
+                    } else if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
+                        tool.showError("No se encontró '('");
+                    } else {
+                        tool.showError("Se esperaban ':'");
+                    }
+                }
+            } else {
+                tool.showError("Expresión condicional no válida");
+            }
+        }
+        return flag;
+    }
+
+    public boolean isElseStatement() {
+        boolean flag = false;
+        if (tool.verifyToken(TokenType.ELSE)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                flag = true;
+                tool.incrementIndex();
+                System.out.println("ELSE CORRECTO");
             }
         }
         return flag;
@@ -77,8 +131,10 @@ public class CompoundStatements {
         boolean flag = false;
         if (tool.verifyToken(TokenType.WHILE)) {
             tool.incrementIndex();
-            if (expParser.isCompoundExpression()) {
+            if (expParser.isValidExpression()) {
                 if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                    flag = true;
+                    tool.incrementIndex();
                     System.out.println("WHILE CORRECTO");
                 } else {
                     tool.showError("Se esperaban ':'");
@@ -106,6 +162,9 @@ public class CompoundStatements {
                                     tool.incrementIndex();
                                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                                         // FIN DEL ARBOL SINTACTICO
+                                        flag = true;
+                                        tool.incrementIndex();
+                                        System.out.println("FOR CORRECTO");
                                     } else {
                                         tool.showError("Se esperaban ':'");
                                     }
@@ -118,10 +177,15 @@ public class CompoundStatements {
                         } else {
                             tool.showError("Se esperaban '('");
                         }
-                    } else if (tool.verifyToken(TokenType.CADENA)) {
+                    } else if (tool.verifyToken(TokenType.CADENA) || tool.verifyToken(TokenType.IDENTIFICADOR_CONJUNTO)
+                            || tool.verifyToken(TokenType.IDENTIFICADOR_LISTA)
+                            || tool.verifyToken(TokenType.IDENTIFICADOR_TUPLA)) {
                         tool.incrementIndex();
                         if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                             // FIN DEL ARBOL SINTACTICO
+                            flag = true;
+                            tool.incrementIndex();
+                            System.out.println("FOR (LISTA, TUPLA, CADENA, CONJUNTO) CORRECTO");
                         }
                     } else {
                         tool.showError("Se esperaban expresión");
@@ -139,12 +203,83 @@ public class CompoundStatements {
     public boolean isMatchStatement() {
         boolean flag = false;
         // TO-DO
+        if (tool.verifyToken(TokenType.MATCH)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.IDENTIFICADOR) || tool.verifyToken(TokenType.IDENTIFICADOR_CLASE)) {
+                tool.incrementIndex();
+                if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                    tool.incrementIndex();
+                    System.out.println("MATCH CORRECTO");
+                    flag = true;
+                } else {
+                    tool.showError("Se esperaba ':'");
+                }
+            } else {
+                tool.showError("Se esperaba valor a comparar");
+            }
+        }
+        return flag;
+    }
+
+    public boolean isCaseStatement() {
+        boolean flag = true;
+        if (tool.verifyToken(TokenType.CASE)) {
+            tool.incrementIndex();
+            if (tool.isValueToken(tool.getCurrentToken()) || tool.verifyToken(TokenType.NONE)) {
+                tool.incrementIndex();
+                while (tool.verifyToken(TokenType.OR)) {
+                    tool.incrementIndex();
+                    if (tool.isValueToken(tool.getCurrentToken()) || tool.verifyToken(TokenType.NONE)) {
+                        tool.incrementIndex();
+                    } else {
+                        tool.showError("Se esperaba valor después de '|'");
+                        flag = false;
+                    }
+                }
+            } else {
+                tool.showError("Se esperaba valor o patrón");
+            }
+
+        }
         return flag;
     }
 
     public boolean isTryStatement() {
         boolean flag = false;
-        // TO-DO
+        if (tool.verifyToken(TokenType.TRY)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                tool.incrementIndex();
+                System.out.println("TRY CORRECTO");
+            }
+        }
+        return flag;
+    }
+
+    public boolean isExceptStatement() {
+        boolean flag = false;
+        if (tool.verifyToken(TokenType.EXCEPT)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.IDENTIFICADOR_EXCEPCION)) {
+                tool.incrementIndex();
+                if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                    tool.incrementIndex();
+                    System.out.println("EXCEPT CORRECTO");
+                }
+            }
+        }
+        return flag;
+    }
+
+    public boolean isFinallyStatement() {
+        boolean flag = false;
+        if (tool.verifyToken(TokenType.FINALLY)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                tool.incrementIndex();
+                System.out.println("FINALLY CORRECTO");
+            }
+        }
         return flag;
     }
 }

@@ -13,19 +13,14 @@ public class SimpleStatements {
     }
 
     public boolean isSimpleStatement() {
-        if (assigns.isAssignment() || isReturnStatement() || isImportStatement()
+        tool.setCurrentRow(tool.getCurrentToken().getRow());
+        if (assigns.isAssignment() || isImportStatement()
                 || tool.verifyToken(TokenType.PASS) || tool.verifyToken(TokenType.BREAK)
                 || tool.verifyToken(TokenType.CONTINUE)) {
             return true;
         } else {
             return false;
         }
-    }
-
-    public boolean isReturnStatement() {
-        boolean flag = false;
-        // TO-DO
-        return flag;
     }
 
     public boolean isImportStatement() {

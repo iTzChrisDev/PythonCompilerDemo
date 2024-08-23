@@ -98,19 +98,15 @@ public class Lexer {
                     lexeme = "";
                 }
                 if (isOperator(Character.toString(chars[index]))) {
-                    if (index != tokenList.size() - 1) {
-                        if (isOperator(Character.toString(chars[index + 1]))) {
-                            column = index + 1;
-                            tokenList.add(
-                                    new Token(Character.toString(chars[index]) + Character.toString(chars[index + 1]),
-                                            TokenType.DESCONOCIDO, row, column));
-                            index++;
-                        } else {
-                            column = index + 1;
-                            tokenList.add(
-                                    new Token(Character.toString(chars[index]), TokenType.DESCONOCIDO, row, column));
-                        }
+                    column = index + 1;
+                    String lex;
+                    if (index < chars.length - 1 && isOperator(Character.toString(chars[index + 1]))) {
+                        lex = Character.toString(chars[index]) + Character.toString(chars[index + 1]);
+                        index++;
+                    } else {
+                        lex = Character.toString(chars[index]);
                     }
+                    tokenList.add(new Token(lex, TokenType.DESCONOCIDO, row, column));
                 } else if (isDelimiter(Character.toString(chars[index]))) {
                     column = index + 1;
                     tokenList.add(new Token(Character.toString(chars[index]), TokenType.DESCONOCIDO, row, column));
@@ -212,25 +208,25 @@ public class Lexer {
      */
     private boolean isIdentifier(String lexeme, int tknIndex) {
         boolean val = false;
-        try {
-            if (tokenList.get(tknIndex + 1).getLexeme().equals("=")) {
-                if (tokenList.get(tknIndex + 2).getLexeme().equals("{")) {
-                    tokenType = TokenType.IDENTIFICADOR_CONJUNTO;
-                } else if (tokenList.get(tknIndex + 2).getLexeme().equals("(")) {
-                    tokenType = TokenType.IDENTIFICADOR_TUPLA;
-                } else if (tokenList.get(tknIndex + 2).getLexeme().equals("[")) {
-                    tokenType = TokenType.IDENTIFICADOR_LISTA;
-                } else {
-                    tokenType = TokenType.IDENTIFICADOR;
-                }
-                variableNames.add(lexeme);
-                val = !val;
-            } else if (variableNames.contains(lexeme)) {
+        if (tknIndex >= 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.EXCEPT) {
+            tokenType = TokenType.IDENTIFICADOR_EXCEPCION;
+            val = !val;
+        }
+        if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex + 1).getLexeme().equals("=")) {
+            if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("{")) {
+                tokenType = TokenType.IDENTIFICADOR_CONJUNTO;
+            } else if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("(")) {
+                tokenType = TokenType.IDENTIFICADOR_TUPLA;
+            } else if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("[")) {
+                tokenType = TokenType.IDENTIFICADOR_LISTA;
+            } else {
                 tokenType = TokenType.IDENTIFICADOR;
-                val = !val;
             }
-        } catch (IndexOutOfBoundsException e) {
-
+            variableNames.add(lexeme);
+            val = !val;
+        } else if (variableNames.contains(lexeme)) {
+            tokenType = TokenType.IDENTIFICADOR;
+            val = !val;
         }
         return val;
     }
@@ -247,21 +243,17 @@ public class Lexer {
      */
     private boolean isClassIdentifier(String lexeme, int tknIndex) {
         boolean val = false;
-        try {
-            if (tokenList.get(tknIndex - 1).getToken() == TokenType.CLASS) {
-                if (!variableNames.contains(lexeme)) {
-                    tokenType = TokenType.IDENTIFICADOR_CLASE;
-                    val = !val;
-                }
-            } else if (tokenList.get(tknIndex - 1).getToken() == TokenType.FOR) {
-                tokenType = TokenType.IDENTIFICADOR;
-                val = !val;
-            } else if (tokenList.get(tknIndex - 1).getToken() == TokenType.DEF) {
-                tokenType = TokenType.IDENTIFICADOR_FUNCION;
+        if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.CLASS) {
+            if (!variableNames.contains(lexeme)) {
+                tokenType = TokenType.IDENTIFICADOR_CLASE;
                 val = !val;
             }
-        } catch (IndexOutOfBoundsException e) {
-
+        } else if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.FOR) {
+            tokenType = TokenType.IDENTIFICADOR;
+            val = !val;
+        } else if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.DEF) {
+            tokenType = TokenType.IDENTIFICADOR_FUNCION;
+            val = !val;
         }
         return val;
     }

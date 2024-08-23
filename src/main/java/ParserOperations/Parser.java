@@ -8,10 +8,12 @@ public class Parser {
 
     private Utilities tool;
     private CompoundStatements comp;
+    private SimpleStatements simp;
 
     public Parser(ArrayList<Token> tokenList, JTextArea console) {
         tool = new Utilities();
         comp = new CompoundStatements();
+        simp = new SimpleStatements();
         tool.setIndex(0);
         tool.setTokenList(tokenList);
         tool.setConsole(console);
@@ -19,14 +21,12 @@ public class Parser {
     }
 
     public void parseCode() {
-        while (tool.getIndex() < tool.getTokenList().size()) {
-            Token tkn = tool.getTokenList().get(tool.getIndex());
-            switch (tkn.getToken()) {
-                case IF:
-                    comp.isIfStatement();
-                    break;
-            }
-            tool.incrementIndex();
+        if (simp.isSimpleStatement()) {
+            parseCode();
+        } else if (comp.isCompoundStatement()) {
+            parseCode();
+        } else {
+            System.out.println("FIN DE EJECUCIÓN\n");
         }
     }
 
