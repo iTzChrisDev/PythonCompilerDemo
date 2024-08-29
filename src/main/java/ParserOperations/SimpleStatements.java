@@ -14,13 +14,51 @@ public class SimpleStatements {
 
     public boolean isSimpleStatement() {
         tool.setCurrentRow(tool.getCurrentToken().getRow());
-        if (assigns.isAssignment() || isImportStatement()
+        if (assigns.isAssignment() || isImportStatement() || isPrint()
                 || tool.verifyToken(TokenType.PASS) || tool.verifyToken(TokenType.BREAK)
                 || tool.verifyToken(TokenType.CONTINUE)) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean isPrint() {
+        boolean flag = false;
+        if (tool.verifyToken(TokenType.PRINT)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
+                tool.incrementIndex();
+                if (tool.isValueToken(tool.getCurrentToken())) {
+                    tool.incrementIndex();
+                    if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
+                        flag = true;
+                        tool.incrementIndex();
+                    } else if (tool.verifyToken(TokenType.COMA)) {
+                        tool.incrementIndex();
+                        if (tool.isValueToken(tool.getCurrentToken())) {
+                            tool.incrementIndex();
+                            if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
+                                tool.incrementIndex();
+                                flag = true;
+                            }
+                            tool.showError("Se esperaba ')'");
+                            flag = false;
+                        } else {
+                            tool.showError("Se esperaba ','");
+                            flag = false;
+                        }
+                    } else {
+                        tool.showError("Se esperaba cierre de expresión");
+                    }
+                } else {
+                    tool.showError("Se esperaba valor");
+                }
+            } else {
+                tool.showError("Se esperaba '('");
+            }
+        }
+        return flag;
     }
 
     public boolean isImportStatement() {

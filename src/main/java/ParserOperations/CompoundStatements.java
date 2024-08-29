@@ -35,6 +35,7 @@ public class CompoundStatements {
                         tool.incrementIndex();
                         if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                             tool.incrementIndex();
+                            flag = true;
                         }
                     }
                 }

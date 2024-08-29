@@ -18,8 +18,76 @@ public class Assignments {
     }
 
     public boolean isArithmeticOperation() {
+        if (isExpression() || isTerm()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isExpression() {
         boolean flag = false;
-        // TO-DO
+        if (isTerm()) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.SUMA) || tool.verifyToken(TokenType.RESTA)) {
+                tool.incrementIndex();
+                if (isExpression()) {
+                    flag = true;
+                } else if (tool.getIndex() < tool.getTokenList().size() - 1
+                        && tool.getTokenList().get(tool.getIndex() + 1).getRow() != tool.getCurrentToken().getRow()) {
+                    flag = true;
+                } else {
+                    tool.showError("Se esperaba una expresión");
+                }
+            } else {
+                tool.showError("Se esperaba operador (+, -)");
+            }
+        } else {
+            tool.showError("Se esperaba termino");
+        }
+        return flag;
+    }
+
+    private boolean isTerm() {
+        boolean flag = false;
+        if (isFactor()) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.MULTIPLICACION) || tool.verifyToken(TokenType.DIVISION)) {
+                tool.incrementIndex();
+                if (isTerm()) {
+                    flag = true;
+                } else if (tool.getIndex() < tool.getTokenList().size() - 1
+                        && tool.getTokenList().get(tool.getIndex() + 1).getRow() != tool.getCurrentToken().getRow()) {
+                    flag = true;
+                } else {
+                    tool.showError("Se esperaba un termino");
+                }
+            } else {
+                tool.showError("Se esperaba operador (*, /)");
+            }
+        }
+        return flag;
+    }
+
+    private boolean isFactor() {
+        boolean flag = false;
+        if (tool.verifyToken(TokenType.ENTERO) || tool.verifyToken(TokenType.DECIMAL)) {
+            flag = true;
+        } else if (tool.verifyToken(TokenType.IDENTIFICADOR)) {
+            flag = true;
+        } else if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
+            tool.incrementIndex();
+            if (isExpression()) {
+                if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
+                    tool.incrementIndex();
+                    flag = true;
+                } else {
+                    tool.showError("Se esperaba ')");
+                }
+            }
+        } else {
+            tool.showError("Se esperaba un factor");
+        }
         return flag;
     }
 
@@ -33,7 +101,6 @@ public class Assignments {
                     flag = true;
                     System.out.println("VARIABLE DECLARADA");
                     tool.incrementIndex();
-
                 } else {
                     tool.showError("Se esperaba valor");
                 }
@@ -43,7 +110,6 @@ public class Assignments {
                     System.out.println("VARIABLE AUGASSIGN");
                     flag = true;
                     tool.incrementIndex();
-
                 } else {
                     tool.showError("Se esperaba valor");
                 }
@@ -79,7 +145,6 @@ public class Assignments {
                                 tool.showError("Se esperaba ')'");
                             }
                         }
-
                     } else {
                         tool.showError("Se esperaba valor");
                     }
@@ -102,7 +167,6 @@ public class Assignments {
                                 tool.showError("Se esperaba '}'");
                             }
                         }
-
                     } else {
                         tool.showError("Se esperaba valor");
                     }

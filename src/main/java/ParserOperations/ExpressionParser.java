@@ -105,7 +105,7 @@ public class ExpressionParser {
                 tool.incrementIndex();
                 result = true;
             } else {
-                tool.showError("Se esperaba ')' - METHOD");
+                tool.showError("Se esperaba ')'");
                 return false;
             }
         } else if (tool.isValueToken(tool.getCurrentToken())) {
