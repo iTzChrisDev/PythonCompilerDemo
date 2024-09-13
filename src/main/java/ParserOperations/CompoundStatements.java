@@ -16,6 +16,8 @@ public class CompoundStatements {
         tool.setCurrentRow(tool.getCurrentToken().getRow());
         if (isFunctionDef() || isClassDeclaration() || isIfStatement() || isForStatement()
                 || isWhileStatement() || isMatchStatement() || isTryStatement()) {
+            // tool.indent();
+            // System.out.println(tool.getCurrentToken().getToken() + " - " + tool.getCurrentIndent());
             return true;
         } else {
             return false;
@@ -54,7 +56,7 @@ public class CompoundStatements {
                     // Fin del arbol sintáctico
                     flag = true;
                     tool.incrementIndex();
-                    System.out.println("CLASS CORRECTO");
+                    // System.out.println("CLASS CORRECTO");
                 } else {
                     tool.showError("Se esperaba ':'");
                 }
@@ -76,7 +78,7 @@ public class CompoundStatements {
                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                         flag = true;
                         tool.incrementIndex();
-                        System.out.println("IF CORRECTO");
+                        // System.out.println("IF CORRECTO");
                     } else if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                         tool.showError("No se encontró '('");
                     } else {
@@ -101,7 +103,7 @@ public class CompoundStatements {
                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                         flag = true;
                         tool.incrementIndex();
-                        System.out.println("ELIF CORRECTO");
+                        // System.out.println("ELIF CORRECTO");
                     } else if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                         tool.showError("No se encontró '('");
                     } else {
@@ -122,7 +124,7 @@ public class CompoundStatements {
             if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                 flag = true;
                 tool.incrementIndex();
-                System.out.println("ELSE CORRECTO");
+                // System.out.println("ELSE CORRECTO");
             }
         }
         return flag;
@@ -136,7 +138,7 @@ public class CompoundStatements {
                 if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                     flag = true;
                     tool.incrementIndex();
-                    System.out.println("WHILE CORRECTO");
+                    // System.out.println("WHILE CORRECTO");
                 } else {
                     tool.showError("Se esperaban ':'");
                 }
@@ -165,7 +167,7 @@ public class CompoundStatements {
                                         // FIN DEL ARBOL SINTACTICO
                                         flag = true;
                                         tool.incrementIndex();
-                                        System.out.println("FOR CORRECTO");
+                                        // System.out.println("FOR CORRECTO");
                                     } else {
                                         tool.showError("Se esperaban ':'");
                                     }
@@ -206,11 +208,11 @@ public class CompoundStatements {
         // TO-DO
         if (tool.verifyToken(TokenType.MATCH)) {
             tool.incrementIndex();
-            if (tool.verifyToken(TokenType.IDENTIFICADOR) || tool.verifyToken(TokenType.IDENTIFICADOR_CLASE)) {
+            if (tool.isValueToken(tool.getCurrentToken())) {
                 tool.incrementIndex();
                 if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                     tool.incrementIndex();
-                    System.out.println("MATCH CORRECTO");
+                    // System.out.println("MATCH CORRECTO");
                     flag = true;
                 } else {
                     tool.showError("Se esperaba ':'");

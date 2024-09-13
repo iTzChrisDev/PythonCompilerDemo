@@ -249,6 +249,7 @@ public class Lexer {
                 val = !val;
             }
         } else if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.FOR) {
+            variableNames.add(lexeme);
             tokenType = TokenType.IDENTIFICADOR;
             val = !val;
         } else if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.DEF) {

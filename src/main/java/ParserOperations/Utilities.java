@@ -7,7 +7,7 @@ import javax.swing.JTextArea;
 
 public class Utilities {
 
-    private static int index, currentRow;
+    private static int index, currentRow, currentIndent;
     private static ArrayList<Token> tokenList;
     private static JTextArea console;
 
@@ -46,6 +46,22 @@ public class Utilities {
                 || tkn.getToken().equals(TokenType.DIFERENCIA);
     }
 
+    protected static int getCurrentIndent() {
+        return currentIndent;
+    }
+
+    protected static void setCurrentIndent(int indent) {
+        currentIndent = indent;
+    }
+
+    protected static void indent() {
+        currentIndent += 4;
+    }
+
+    protected static void dedent() {
+        currentIndent -= 4;
+    }
+
     protected static void setIndex(int newIndex) {
         Utilities.index = newIndex;
     }
@@ -81,7 +97,6 @@ public class Utilities {
     protected static void incrementIndex() {
         if (index < tokenList.size() - 1) {
             index++;
-            System.out.println(tokenList.get(index));
         }
     }
 
@@ -91,5 +106,9 @@ public class Utilities {
 
     public static void setCurrentRow(int currentRow) {
         Utilities.currentRow = currentRow;
+    }
+
+    public static int getCurrentRow() {
+        return currentRow;
     }
 }

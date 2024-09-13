@@ -17,10 +17,10 @@ public class ExpressionParser {
             tool.showError("Se esperaba una expresión válida");
         } else if (tool.getIndex() < tool.getTokenList().size()
                 && tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
-            tool.showError("Se esperaba '(' - METHOD");
+            tool.showError("Se esperaba '('");
         } else if (tool.getIndex() < tool.getTokenList().size()
                 && tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
-            tool.showError("Se esperaba ')' - METHOD");
+            tool.showError("Se esperaba ')'");
         } else {
             val = true;
         }

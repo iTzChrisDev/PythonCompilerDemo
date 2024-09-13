@@ -41,9 +41,10 @@ public class SimpleStatements {
                             if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                                 tool.incrementIndex();
                                 flag = true;
+                            } else {
+                                tool.showError("Se esperaba ')'");
+                                flag = false;
                             }
-                            tool.showError("Se esperaba ')'");
-                            flag = false;
                         } else {
                             tool.showError("Se esperaba ','");
                             flag = false;

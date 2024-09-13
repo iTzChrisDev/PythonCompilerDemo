@@ -10,7 +10,7 @@ public class Assignments {
     }
 
     public boolean isAssignment() {
-        if (isArithmeticOperation() || isValueAssign() || isDataCollection() || isCallFunction()) {
+        if (/* isArithmeticOperation() || */isValueAssign() || isDataCollection() || isCallFunction()) {
             return true;
         } else {
             return false;
@@ -99,7 +99,7 @@ public class Assignments {
                 tool.incrementIndex();
                 if (tool.isValueToken(tool.getCurrentToken())) {
                     flag = true;
-                    System.out.println("VARIABLE DECLARADA");
+                    // System.out.println("VARIABLE DECLARADA");
                     tool.incrementIndex();
                 } else {
                     tool.showError("Se esperaba valor");
