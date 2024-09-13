@@ -9,7 +9,7 @@ public class Parser {
     private Utilities tool;
     private CompoundStatements comp;
     private SimpleStatements simp;
-    private boolean printFlag;
+    public static boolean flag;
 
     public Parser(ArrayList<Token> tokenList, JTextArea console) {
         tool = new Utilities();
@@ -23,35 +23,28 @@ public class Parser {
     }
 
     public void parseCode() {
-        System.out.println("INDENTACION -> " + tool.getCurrentIndent());
-        while (comp.isCompoundStatement()) {
-            if (simp.isSimpleStatement()) {
-            } else if (tool.getCurrentIndent() != tool.getCurrentToken().getColumn()) {
-                tool.getConsole().setText(tool.getConsole().getText() + "Indentacion no valida en la linea "
-                        + tool.getCurrentToken().getRow() + "\n");
-            }
-            tool.indent();
-            parseCode();
-        }
-        tool.dedent();
-        // if (tool.getCurrentIndent() == tool.getCurrentToken().getColumn()) {
-        // tool.indent();
-        // if (comp.isCompoundStatement()) {
-        // if (simp.isSimpleStatement()) {
-        // parseCode();
-        // } else {
-        // tool.dedent();
-        // }
-        // } // Fin de la ejecucion
-        // } else if (simp.isSimpleStatement()) {
-        // // No hay cambio en la indentacion.
-        // } else {
-        // tool.getConsole().setText(tool.getConsole().getText() + "Indentacion no
-        // valida en la linea "
-        // + tool.getCurrentToken().getRow() + "\n");
-        // }
+        System.out.println("\nEjecución");
+        statements();
     }
 
-    public void statement() {
+    public void statements() {
+        System.out.println("INDENTACION -> " + tool.getCurrentIndent() + " - " + tool.getCurrentToken().getLexeme());
+
+        if (comp.isCompoundStatement() || simp.isSimpleStatement()) {
+            if (flag) {
+                if (tool.getCurrentToken().getColumn() <= tool.getCurrentIndent()) {
+                    flag = false;
+                    statements();
+                }
+            } else {
+                if (tool.getCurrentToken().getColumn() != tool.getCurrentIndent()) {
+                    tool.getConsole().setText(tool.getConsole().getText() + "Indentacion no valida en la linea "
+                            + tool.getCurrentToken().getRow() + "\n");
+                } else {
+                    flag = true;
+                    statements();
+                }
+            }
+        }
     }
 }

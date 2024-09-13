@@ -107,7 +107,7 @@ public class Assignments {
             } else if (tool.isAssignment(tool.getCurrentToken())) {
                 tool.incrementIndex();
                 if (tool.isValueToken(tool.getCurrentToken())) {
-                    System.out.println("VARIABLE AUGASSIGN");
+                    // System.out.println("VARIABLE AUGASSIGN");
                     flag = true;
                     tool.incrementIndex();
                 } else {

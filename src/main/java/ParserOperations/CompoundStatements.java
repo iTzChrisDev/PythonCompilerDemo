@@ -16,8 +16,9 @@ public class CompoundStatements {
         tool.setCurrentRow(tool.getCurrentToken().getRow());
         if (isFunctionDef() || isClassDeclaration() || isIfStatement() || isForStatement()
                 || isWhileStatement() || isMatchStatement() || isTryStatement()) {
-            // tool.indent();
-            // System.out.println(tool.getCurrentToken().getToken() + " - " + tool.getCurrentIndent());
+            tool.indent();
+            // System.out.println(tool.getCurrentToken().getToken() + " - " +
+            // tool.getCurrentIndent());
             return true;
         } else {
             return false;
