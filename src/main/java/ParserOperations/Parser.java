@@ -9,13 +9,15 @@ public class Parser {
     private Utilities tool;
     private CompoundStatements cs;
     private SimpleStatements ss;
-    private static int currentLine;
+    private IndentationParser ip;
+    private ArrayList<Token> listIndent;
 
     public Parser(ArrayList<Token> tokenList, JTextArea console) {
+        listIndent = new ArrayList<>();
         tool = new Utilities();
         cs = new CompoundStatements();
         ss = new SimpleStatements();
-        currentLine = 0;
+        ip = new IndentationParser(listIndent);
         tool.setIndex(0);
         tool.setCurrentIndent(1);
         tool.setLine(1);
@@ -25,26 +27,25 @@ public class Parser {
     }
 
     public void parseCode() {
-        System.out.println("\nEjecución");
+        System.out.println("\nInicio Ejecución");
         statements();
+        ip.checkIndent();
+        System.out.println("Fin Ejecución");
     }
 
     public void statements() {
-        // System.out.println("INDENTACION -> " + tool.getCurrentIndent() + " - " +
-        if (tool.getTokenList().get(tool.getTokenList().size() - 1).getRow() != tool.getCurrentToken().getRow()) {
+        if (tool.getIndex() != tool.getTokenList().size() - 1) {
+            listIndent.add(tool.getCurrentToken());
             if (cs.isCompoundStatement()) {
-                System.out.println("Procesando declaración compuesta...");
-                System.out.println(tool.getCurrentToken().getLexeme());
+                // CompoundStatement correcto
                 statements();
-                // Aquí debes incluir la lógica que cambia el estado de cs
             } else if (ss.isSimpleStatement()) {
-                System.out.println("Procesando declaración simple...");
-                System.out.println(tool.getCurrentToken().getLexeme());
+                // SimpleStatement correcto
                 statements();
-                // Aquí debes incluir la lógica que cambia el estado de ss
-            } else {
-                System.out.println("Fin de Ejecución");
             }
-        }
+        } 
+        // else {
+        //     System.out.println("Fin de Ejecución");
+        // }
     }
 }

@@ -19,6 +19,17 @@ public class Utilities {
         console.setText(console.getText() + errorMessage + " en la linea " + currentRow + "\n");
     }
 
+    protected boolean needIndent(Token tkn) {
+        return tkn.getToken().equals(TokenType.CLASS)
+                || tkn.getToken().equals(TokenType.FOR)
+                || tkn.getToken().equals(TokenType.WHILE)
+                || tkn.getToken().equals(TokenType.MATCH)
+                || tkn.getToken().equals(TokenType.CASE)
+                || tkn.getToken().equals(TokenType.IF)
+                || tkn.getToken().equals(TokenType.ELIF)
+                || tkn.getToken().equals(TokenType.ELSE);
+    }
+
     protected boolean isAssignment(Token tkn) {
         return tkn.getToken().equals(TokenType.SUMA_ASIGNACION)
                 || tkn.getToken().equals(TokenType.RESTA_ASIGNACION)

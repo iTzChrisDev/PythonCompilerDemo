@@ -20,33 +20,10 @@ public class CompoundStatements {
                 || isForStatement()
                 || isWhileStatement()
                 || isMatchStatement() || isCaseStatement()) {
-            tool.indent();
             flag = true;
         }
         return flag;
     }
-
-    // public boolean isFunctionDef() {
-    //     boolean flag = false;
-    //     // TO-DO
-    //     if (tool.verifyToken(TokenType.DEF)) {
-    //         tool.incrementIndex();
-    //         if (tool.verifyToken(TokenType.IDENTIFICADOR_FUNCION)) {
-    //             tool.incrementIndex();
-    //             if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
-    //                 tool.incrementIndex();
-    //                 if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
-    //                     tool.incrementIndex();
-    //                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-    //                         tool.incrementIndex();
-    //                         flag = true;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return flag;
-    // }
 
     public boolean isClassDeclaration() {
         boolean flag = false;
@@ -75,7 +52,6 @@ public class CompoundStatements {
             tool.incrementIndex();
             // Verificar si la expresión condicional es válida
             if (expParser.isValidExpression()) {
-                // Verificar el token siguiente
                 if (tool.getIndex() < tool.getTokenList().size()) {
                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                         flag = true;
@@ -100,7 +76,6 @@ public class CompoundStatements {
             tool.incrementIndex();
             // Verificar si la expresión condicional es válida
             if (expParser.isValidExpression()) {
-                // Verificar el token siguiente
                 if (tool.getIndex() < tool.getTokenList().size()) {
                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                         flag = true;
@@ -127,7 +102,7 @@ public class CompoundStatements {
                 flag = true;
                 tool.incrementIndex();
                 // System.out.println("ELSE CORRECTO");
-            }else{
+            } else {
                 tool.showError("Se esperaban ':'");
             }
         }
@@ -142,7 +117,6 @@ public class CompoundStatements {
                 if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                     flag = true;
                     tool.incrementIndex();
-                    // System.out.println("WHILE CORRECTO");
                 } else {
                     tool.showError("Se esperaban ':'");
                 }
@@ -209,7 +183,6 @@ public class CompoundStatements {
 
     public boolean isMatchStatement() {
         boolean flag = false;
-        // TO-DO
         if (tool.verifyToken(TokenType.MATCH)) {
             // int matchCol = tool.getCurrentToken().getColumn();
             tool.incrementIndex();
@@ -246,6 +219,28 @@ public class CompoundStatements {
         }
         return flag;
     }
+
+    // public boolean isFunctionDef() {
+    // boolean flag = false;
+    // // TO-DO
+    // if (tool.verifyToken(TokenType.DEF)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.IDENTIFICADOR_FUNCION)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+    // tool.incrementIndex();
+    // flag = true;
+    // }
+    // }
+    // }
+    // }
+    // }
+    // return flag;
+    // }
 
     // public boolean isTryStatement() {
     // boolean flag = false;

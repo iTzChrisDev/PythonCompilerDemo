@@ -6,4 +6,3 @@ class ciclo_simple:
             cont += 1
         else:
             print("Invalido:", cont)
-            break;
