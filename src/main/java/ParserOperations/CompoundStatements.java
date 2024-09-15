@@ -13,39 +13,40 @@ public class CompoundStatements {
     }
 
     public boolean isCompoundStatement() {
-        tool.setCurrentRow(tool.getCurrentToken().getRow());
-        if (isFunctionDef() || isClassDeclaration() || isIfStatement() || isForStatement()
-                || isWhileStatement() || isMatchStatement() || isTryStatement()) {
-            tool.indent();
-            // System.out.println(tool.getCurrentToken().getToken() + " - " +
-            // tool.getCurrentIndent());
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isFunctionDef() {
         boolean flag = false;
-        // TO-DO
-        if (tool.verifyToken(TokenType.DEF)) {
-            tool.incrementIndex();
-            if (tool.verifyToken(TokenType.IDENTIFICADOR_FUNCION)) {
-                tool.incrementIndex();
-                if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
-                    tool.incrementIndex();
-                    if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
-                        tool.incrementIndex();
-                        if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                            tool.incrementIndex();
-                            flag = true;
-                        }
-                    }
-                }
-            }
+        tool.setCurrentRow(tool.getCurrentToken().getRow());
+        if (isClassDeclaration()
+                || isIfStatement() || isElifStatement() || isElseStatement()
+                || isForStatement()
+                || isWhileStatement()
+                || isMatchStatement() || isCaseStatement()) {
+            tool.indent();
+            flag = true;
         }
         return flag;
     }
+
+    // public boolean isFunctionDef() {
+    //     boolean flag = false;
+    //     // TO-DO
+    //     if (tool.verifyToken(TokenType.DEF)) {
+    //         tool.incrementIndex();
+    //         if (tool.verifyToken(TokenType.IDENTIFICADOR_FUNCION)) {
+    //             tool.incrementIndex();
+    //             if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
+    //                 tool.incrementIndex();
+    //                 if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
+    //                     tool.incrementIndex();
+    //                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+    //                         tool.incrementIndex();
+    //                         flag = true;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return flag;
+    // }
 
     public boolean isClassDeclaration() {
         boolean flag = false;
@@ -126,6 +127,8 @@ public class CompoundStatements {
                 flag = true;
                 tool.incrementIndex();
                 // System.out.println("ELSE CORRECTO");
+            }else{
+                tool.showError("Se esperaban ':'");
             }
         }
         return flag;
@@ -208,15 +211,15 @@ public class CompoundStatements {
         boolean flag = false;
         // TO-DO
         if (tool.verifyToken(TokenType.MATCH)) {
+            // int matchCol = tool.getCurrentToken().getColumn();
             tool.incrementIndex();
             if (tool.isValueToken(tool.getCurrentToken())) {
                 tool.incrementIndex();
                 if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
                     tool.incrementIndex();
-                    // System.out.println("MATCH CORRECTO");
                     flag = true;
                 } else {
-                    tool.showError("Se esperaba ':'");
+                    tool.showError("Se esperaban ':'");
                 }
             } else {
                 tool.showError("Se esperaba valor a comparar");
@@ -226,64 +229,60 @@ public class CompoundStatements {
     }
 
     public boolean isCaseStatement() {
-        boolean flag = true;
+        boolean flag = false;
         if (tool.verifyToken(TokenType.CASE)) {
             tool.incrementIndex();
             if (tool.isValueToken(tool.getCurrentToken()) || tool.verifyToken(TokenType.NONE)) {
                 tool.incrementIndex();
-                while (tool.verifyToken(TokenType.OR)) {
+                if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+                    flag = true;
                     tool.incrementIndex();
-                    if (tool.isValueToken(tool.getCurrentToken()) || tool.verifyToken(TokenType.NONE)) {
-                        tool.incrementIndex();
-                    } else {
-                        tool.showError("Se esperaba valor después de '|'");
-                        flag = false;
-                    }
+                } else {
+                    tool.showError("Se esperaban ':'");
                 }
             } else {
                 tool.showError("Se esperaba valor o patrón");
             }
-
         }
         return flag;
     }
 
-    public boolean isTryStatement() {
-        boolean flag = false;
-        if (tool.verifyToken(TokenType.TRY)) {
-            tool.incrementIndex();
-            if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                tool.incrementIndex();
-                System.out.println("TRY CORRECTO");
-            }
-        }
-        return flag;
-    }
+    // public boolean isTryStatement() {
+    // boolean flag = false;
+    // if (tool.verifyToken(TokenType.TRY)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+    // tool.incrementIndex();
+    // System.out.println("TRY CORRECTO");
+    // }
+    // }
+    // return flag;
+    // }
 
-    public boolean isExceptStatement() {
-        boolean flag = false;
-        if (tool.verifyToken(TokenType.EXCEPT)) {
-            tool.incrementIndex();
-            if (tool.verifyToken(TokenType.IDENTIFICADOR_EXCEPCION)) {
-                tool.incrementIndex();
-                if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                    tool.incrementIndex();
-                    System.out.println("EXCEPT CORRECTO");
-                }
-            }
-        }
-        return flag;
-    }
+    // public boolean isExceptStatement() {
+    // boolean flag = false;
+    // if (tool.verifyToken(TokenType.EXCEPT)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.IDENTIFICADOR_EXCEPCION)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+    // tool.incrementIndex();
+    // System.out.println("EXCEPT CORRECTO");
+    // }
+    // }
+    // }
+    // return flag;
+    // }
 
-    public boolean isFinallyStatement() {
-        boolean flag = false;
-        if (tool.verifyToken(TokenType.FINALLY)) {
-            tool.incrementIndex();
-            if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                tool.incrementIndex();
-                System.out.println("FINALLY CORRECTO");
-            }
-        }
-        return flag;
-    }
+    // public boolean isFinallyStatement() {
+    // boolean flag = false;
+    // if (tool.verifyToken(TokenType.FINALLY)) {
+    // tool.incrementIndex();
+    // if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
+    // tool.incrementIndex();
+    // System.out.println("FINALLY CORRECTO");
+    // }
+    // }
+    // return flag;
+    // }
 }

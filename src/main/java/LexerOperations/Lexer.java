@@ -243,16 +243,16 @@ public class Lexer {
      */
     private boolean isClassIdentifier(String lexeme, int tknIndex) {
         boolean val = false;
-        if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.CLASS) {
+        if (tknIndex > 0 && tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.CLASS) {
             if (!variableNames.contains(lexeme)) {
                 tokenType = TokenType.IDENTIFICADOR_CLASE;
                 val = !val;
             }
-        } else if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.FOR) {
+        } else if (tknIndex > 0 && tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.FOR) {
             variableNames.add(lexeme);
             tokenType = TokenType.IDENTIFICADOR;
             val = !val;
-        } else if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.DEF) {
+        } else if (tknIndex > 0 && tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.DEF) {
             tokenType = TokenType.IDENTIFICADOR_FUNCION;
             val = !val;
         }

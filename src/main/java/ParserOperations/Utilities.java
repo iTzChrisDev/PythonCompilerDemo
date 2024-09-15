@@ -7,7 +7,7 @@ import javax.swing.JTextArea;
 
 public class Utilities {
 
-    private static int index, currentRow, currentIndent;
+    private static int index, currentRow, currentIndent, line;
     private static ArrayList<Token> tokenList;
     private static JTextArea console;
 
@@ -110,5 +110,17 @@ public class Utilities {
 
     public static int getCurrentRow() {
         return currentRow;
+    }
+
+    public static void incrementLine() {
+        line++;
+    }
+
+    public static void setLine(int line) {
+        Utilities.line = line;
+    }
+
+    public static int getLine() {
+        return line;
     }
 }

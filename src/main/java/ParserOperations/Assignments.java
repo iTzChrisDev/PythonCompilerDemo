@@ -10,7 +10,7 @@ public class Assignments {
     }
 
     public boolean isAssignment() {
-        if (/* isArithmeticOperation() || */isValueAssign() || isDataCollection() || isCallFunction()) {
+        if (/* isArithmeticOperation() || */isValueAssign() /*|| isDataCollection()*/) {
             return true;
         } else {
             return false;
@@ -117,12 +117,6 @@ public class Assignments {
                 tool.showError("Se esperaba operador");
             }
         }
-        return flag;
-    }
-
-    public boolean isCallFunction() {
-        boolean flag = false;
-        // TO-DO
         return flag;
     }
 

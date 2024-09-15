@@ -13,10 +13,18 @@ public class SimpleStatements {
     }
 
     public boolean isSimpleStatement() {
+        boolean flag = false;
         tool.setCurrentRow(tool.getCurrentToken().getRow());
-        if (assigns.isAssignment() || isImportStatement() || isPrint()
-                || tool.verifyToken(TokenType.PASS) || tool.verifyToken(TokenType.BREAK)
+        if (assigns.isAssignment() || isImportStatement() || isPrint() || isControlSentence()) {
+            flag = true;
+        }
+        return flag;
+    }
+
+    public boolean isControlSentence() {
+        if (tool.verifyToken(TokenType.PASS) || tool.verifyToken(TokenType.BREAK)
                 || tool.verifyToken(TokenType.CONTINUE)) {
+            tool.incrementIndex();
             return true;
         } else {
             return false;
