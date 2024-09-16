@@ -5,20 +5,16 @@ import Tokens.TokenType;
 public class SimpleStatements {
 
     private Utilities tool;
-    private Assignments assigns;
+    private Assignments as;
 
     public SimpleStatements() {
         tool = new Utilities();
-        assigns = new Assignments();
+        as = new Assignments();
     }
 
     public boolean isSimpleStatement() {
-        boolean flag = false;
         tool.setCurrentRow(tool.getCurrentToken().getRow());
-        if (assigns.isAssignment() || isImportStatement() || isPrint() || isControlSentence()) {
-            flag = true;
-        }
-        return flag;
+        return as.isAssignment() || isImportStatement() || isPrint() || isControlSentence();
     }
 
     public boolean isControlSentence() {

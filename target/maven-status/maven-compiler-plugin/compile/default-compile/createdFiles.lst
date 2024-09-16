@@ -10,6 +10,7 @@ GUI\MainFrame$1.class
 ParserOperations\Utilities.class
 LexerOperations\Lexer.class
 ParserOperations\Parser.class
+ParserOperations\IndentationParser$1.class
 Tokens\TokenType.class
 GUI\MainFrame$3.class
 GUI\MainFrame.class

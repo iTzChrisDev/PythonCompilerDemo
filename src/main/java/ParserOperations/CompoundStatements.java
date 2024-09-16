@@ -13,16 +13,12 @@ public class CompoundStatements {
     }
 
     public boolean isCompoundStatement() {
-        boolean flag = false;
         tool.setCurrentRow(tool.getCurrentToken().getRow());
-        if (isClassDeclaration()
+        return isClassDeclaration()
                 || isIfStatement() || isElifStatement() || isElseStatement()
                 || isForStatement()
                 || isWhileStatement()
-                || isMatchStatement() || isCaseStatement()) {
-            flag = true;
-        }
-        return flag;
+                || isMatchStatement() || isCaseStatement();
     }
 
     public boolean isClassDeclaration() {

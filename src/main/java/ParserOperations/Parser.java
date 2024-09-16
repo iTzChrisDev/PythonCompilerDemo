@@ -1,6 +1,8 @@
 package ParserOperations;
 
 import Tokens.Token;
+import Tokens.TokenType;
+
 import java.util.ArrayList;
 import javax.swing.JTextArea;
 
@@ -42,10 +44,12 @@ public class Parser {
             } else if (ss.isSimpleStatement()) {
                 // SimpleStatement correcto
                 statements();
+            } else if (tool.verifyToken(TokenType.DESCONOCIDO)) {
+                tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
             }
-        } 
+        }
         // else {
-        //     System.out.println("Fin de Ejecución");
+        // System.out.println("Fin de Ejecución");
         // }
     }
 }
