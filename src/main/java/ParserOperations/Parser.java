@@ -37,6 +37,7 @@ public class Parser {
 
     public void statements() {
         if (tool.getIndex() != tool.getTokenList().size() - 1) {
+            System.out.println(tool.getCurrentToken());
             listIndent.add(tool.getCurrentToken());
             if (cs.isCompoundStatement()) {
                 // CompoundStatement correcto
@@ -46,10 +47,11 @@ public class Parser {
                 statements();
             } else if (tool.verifyToken(TokenType.DESCONOCIDO)) {
                 tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
+            } else if (tool.isAssignment(tool.getCurrentToken()) || tool.isOperator(tool.getCurrentToken())
+                    || tool.isRelationalOperator(tool.getCurrentToken())) {
+                tool.showError("Se encontró '" + tool.getCurrentToken().getLexeme() + "' fuera de lugar");
             }
+
         }
-        // else {
-        // System.out.println("Fin de Ejecución");
-        // }
     }
 }

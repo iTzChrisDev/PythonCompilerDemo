@@ -14,7 +14,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return "{" + lexeme + ", " + token + ", " + row + ", " + column + "}";
+        return "{Lex: " + lexeme + ", Token: " + token + ", Row: " + row + ", Column: " + column + "}";
     }
 
     public String getLexeme() {

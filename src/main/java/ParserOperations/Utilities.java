@@ -27,6 +27,14 @@ public class Utilities {
                 || tkn.getToken().equals(TokenType.MULTIPLICACION_ASIGNACION);
     }
 
+    protected boolean isOperator(Token tkn) {
+        return tkn.getToken().equals(TokenType.SUMA)
+                || tkn.getToken().equals(TokenType.RESTA)
+                || tkn.getToken().equals(TokenType.DIVISION)
+                || tkn.getToken().equals(TokenType.MODULO)
+                || tkn.getToken().equals(TokenType.MULTIPLICACION);
+    }
+
     protected boolean isValueFactor(Token tkn) {
         // Verificar si el token es un valor válido
         return tkn.getToken().equals(TokenType.IDENTIFICADOR)

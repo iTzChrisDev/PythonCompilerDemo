@@ -57,7 +57,6 @@ public class Assignments {
         for (Token tkn : tool.getTokenList()) {
             if (tkn.getRow() == tool.getCurrentToken().getRow()
                     && tkn.getColumn() <= tool.getCurrentToken().getColumn()) {
-                System.out.println(tkn.toString());
                 if (tkn.getToken() == TokenType.PARENTESIS_APERTURA) {
                     openParent.add(tkn.getColumn());
                 } else if (tkn.getToken() == TokenType.PARENTESIS_CIERRE) {
@@ -77,7 +76,7 @@ public class Assignments {
 
     public boolean isFactor() {
         boolean flag = false;
-        System.out.println(tool.getCurrentToken().getLexeme());
+        // System.out.println(tool.getCurrentToken().getLexeme());
         if (tool.isValueFactor(tool.getCurrentToken())) {
             tool.incrementIndex();
             flag = true;
