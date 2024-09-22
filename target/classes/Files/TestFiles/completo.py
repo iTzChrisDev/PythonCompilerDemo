@@ -10,7 +10,7 @@ class completo:
 
     # WHILE
     while num != 20:
-        print("Posición: ", num)
+        print("Posicion: ", num)
         num += 1
 
     # MATCH (SWITCH)

@@ -85,6 +85,8 @@ public class Assignments {
             if (tool.verifyToken(TokenType.ENTERO) || tool.verifyToken(TokenType.DECIMAL)) {
                 tool.incrementIndex();
                 flag = true;
+            } else {
+                tool.showError("Se esperaba valor númerico");
             }
         } else if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
             tool.incrementIndex();

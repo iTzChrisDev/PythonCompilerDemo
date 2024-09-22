@@ -11,7 +11,6 @@ public class IndentationParser {
     private static ArrayList<Token> listIndent;
     private int classCount = 0, expectedIndent = 1;
     private Utilities tool;
-    private boolean condition;
 
     public IndentationParser(ArrayList<Token> list) {
         tool = new Utilities();
@@ -25,26 +24,33 @@ public class IndentationParser {
                 case CLASS:
                     checkClassDeclaration(token, classCount);
                     classCount++;
-                    condition = true;
                     break;
                 case WHILE:
                 case FOR:
                     checkIndentation(token);
                     indentStack.push(expectedIndent);
                     expectedIndent += 4;
-                    condition = true;
                     break;
                 case IF:
                     ifColumn = token.getColumn();
                     checkIndentation(token);
                     indentStack.push(expectedIndent);
                     expectedIndent += 4;
-                    condition = true;
                     break;
                 case ELSE:
                 case ELIF:
-                    checkElseOrElif(token, ifColumn);
-                    condition = true;
+                    // Verificar como otros compound
+                    if (token.getColumn() == ifColumn) {
+                        checkIndentation(token);
+                        indentStack.push(expectedIndent);
+                        expectedIndent += 4;
+                    } else if (ifColumn == 0) {
+                        tool.getConsole().setText(tool.getConsole().getText() +
+                                "Sintaxis invalida, no se encontró 'IF' anterior a la linea " + token.getRow() + "\n");
+                    } else {
+                        showIndentError(token);
+                    }
+
                     break;
                 case MATCH:
                 case CASE:
@@ -52,7 +58,6 @@ public class IndentationParser {
                         checkIndentation(token);
                         indentStack.push(expectedIndent);
                         expectedIndent += 4;
-                        condition = true;
                     } else {
                         tool.getConsole().setText(tool.getConsole().getText() +
                                 "Declaracion de 'CASE' no valida en la linea " + token.getRow()
@@ -91,6 +96,8 @@ public class IndentationParser {
         return result;
     }
 
+    int caseCol = 0;
+
     private void checkIndentation(Token token) {
         if (!indentStack.isEmpty() && token.getColumn() < expectedIndent) {
             // Realizar dedentación
@@ -101,30 +108,36 @@ public class IndentationParser {
             showIndentError(token);
         }
 
-        if (condition) {
-            for (int i = 0; i < listIndent.size(); i++) {
-                if (token == listIndent.get(i)) {
-                    Token nextToken = null;
+        for (int i = 0; i < listIndent.size(); i++) {
+            if (token == listIndent.get(i)) {
+                Token nextToken = null;
 
-                    if (i < listIndent.size() - 1) {
-                        nextToken = listIndent.get(i + 1);
+                if (i < listIndent.size() - 1) {
+                    nextToken = listIndent.get(i + 1);
+                }
+
+                if (token.getToken() == TokenType.CASE) {
+                    if (token.getToken() == TokenType.CASE && token.getColumn() == caseCol) {
+                        showIndentError(token);
                     }
+                }
 
-                    if (token.getToken() == TokenType.CLASS || token.getToken() == TokenType.WHILE
-                            || token.getToken() == TokenType.FOR || token.getToken() == TokenType.IF
-                            || token.getToken() == TokenType.ELSE || token.getToken() == TokenType.ELIF
-                            || token.getToken() == TokenType.MATCH || token.getToken() == TokenType.CASE) {
-                        if (nextToken != null && nextToken.getColumn() == token.getColumn()) {
-                            showIndentError(nextToken);
-                        } else {
-                            condition = false;
-                            break;
-                        }
+                if (token.getToken() == TokenType.MATCH) {
+                    caseCol = token.getColumn();
+                }
+
+                if (token.getToken() == TokenType.CLASS || token.getToken() == TokenType.WHILE
+                        || token.getToken() == TokenType.FOR || token.getToken() == TokenType.IF
+                        || token.getToken() == TokenType.ELSE || token.getToken() == TokenType.ELIF
+                        || token.getToken() == TokenType.CASE) {
+                    if (nextToken != null && nextToken.getColumn() == token.getColumn()) {
+                        showIndentError(nextToken);
+                    } else {
+                        break;
                     }
                 }
             }
         }
-
     }
 
     private void checkClassDeclaration(Token token, int classCount) {
@@ -137,15 +150,6 @@ public class IndentationParser {
                     "Declaracion de clase incorrecta en la linea " + token.getRow() + "\n");
         } else {
             expectedIndent += 4;
-        }
-    }
-
-    private void checkElseOrElif(Token token, int ifColumn) {
-        if (token.getColumn() != ifColumn && ifColumn == 0) {
-            tool.getConsole().setText(tool.getConsole().getText() +
-                    "Sintaxis invalida, no se encontró 'IF' anterior a la linea " + token.getRow() + "\n");
-        } else if (token.getColumn() != ifColumn) {
-            showIndentError(token);
         }
     }
 

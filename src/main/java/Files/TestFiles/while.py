@@ -1,5 +1,5 @@
 class while_statement:
     num = 1
     while num != 20:
-        print("Posición: ", num)
+        print("Posicion: ", num)
         num += 1
