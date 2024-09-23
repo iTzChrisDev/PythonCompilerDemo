@@ -111,6 +111,13 @@ public class ExpressionParser {
         } else if (tool.isValueToken(tool.getCurrentToken())) {
             tool.incrementIndex();
             result = true;
+
+        } else if (tool.verifyToken(TokenType.RESTA)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.ENTERO) || tool.verifyToken(TokenType.DECIMAL)) {
+                tool.incrementIndex();
+                result = true;
+            }
         } else {
             tool.showError("Se esperaba un valor");
         }
