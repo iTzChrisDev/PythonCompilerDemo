@@ -82,8 +82,8 @@ public class Parser {
     private void checkTokensUnfound(Map<String, TokenType> tokenMap) {
         for (TokenType tkn : tokenMap.values()) {
             if (tkn == tool.getCurrentToken().getToken()) {
-                tool.showError("Se encontró '" + tool.getCurrentToken().getLexeme()
-                        + "' fuera de un bloque de codigo");
+                tool.showError("Uso de '" + tool.getCurrentToken().getLexeme()
+                        + "' incorrecto");
                 tool.incrementIndex();
             }
         }

@@ -20,6 +20,9 @@ public class Assignments {
     }
 
     public boolean isAssignExpression() {
+        Token aux = tool.getCurrentToken();
+        openParent.clear();
+        closeParent.clear();
         boolean flag = false;
         if (tool.verifyToken(TokenType.IDENTIFICADOR)) {
             tool.incrementIndex();
@@ -66,6 +69,27 @@ public class Assignments {
             }
         }
 
+        boolean val = false;
+        for (Token tkn : tool.getTokenList()) {
+            if (tkn.getRow() == aux.getRow()) {
+                if (tkn.getToken() == TokenType.ASIGNACION) {
+                    val = true;
+                }
+                if (val) {
+                    if (tkn.getToken() == TokenType.PARENTESIS_APERTURA) {
+                        openParent.add(tkn.getColumn());
+                    } else if (tkn.getToken() == TokenType.PARENTESIS_CIERRE) {
+                        closeParent.add(tkn.getColumn());
+                    }
+                }
+            }
+        }
+
+        if (openParent.size() < closeParent.size()) {
+            tool.showError("Se esperaba '('");
+        } else if (openParent.size() > closeParent.size()) {
+            tool.showError("Se esperaba ')'");
+        }
         return flag;
     }
 
@@ -110,26 +134,6 @@ public class Assignments {
                 }
             }
         }
-
-        if (flag) {
-            for (Token tkn : tool.getTokenList()) {
-                if (tkn.getRow() == tool.getCurrentToken().getRow()
-                        && tkn.getColumn() <= tool.getCurrentToken().getColumn()) {
-                    if (tkn.getToken() == TokenType.PARENTESIS_APERTURA) {
-                        openParent.add(tkn.getColumn());
-                    } else if (tkn.getToken() == TokenType.PARENTESIS_CIERRE) {
-                        closeParent.add(tkn.getColumn());
-                    }
-                }
-            }
-
-            if (openParent.size() < closeParent.size()) {
-                tool.showError("Se esperaba '('");
-            } else if (openParent.size() > closeParent.size()) {
-                tool.showError("Se esperaba ')'");
-            }
-        }
-
         return flag;
     }
 
@@ -139,7 +143,8 @@ public class Assignments {
         if (isFactor()) {
             flag = true;
             // Verificar operadores de multiplicación o división
-            while (tool.verifyToken(TokenType.MULTIPLICACION) || tool.verifyToken(TokenType.DIVISION)) {
+            while (tool.verifyToken(TokenType.MULTIPLICACION) || tool.verifyToken(TokenType.DIVISION)
+                    || tool.verifyToken(TokenType.MODULO)) {
                 tool.incrementIndex(); // Avanzar el operador
                 if (!isFactor()) {
                     // tool.showError("[TERM] Se esperaba valor después del operador aritmético");
