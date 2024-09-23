@@ -60,8 +60,7 @@ public class IndentationParser {
                         expectedIndent += 4;
                     } else {
                         tool.getConsole().setText(tool.getConsole().getText() +
-                                "Declaracion de 'CASE' no valida en la linea " + token.getRow()
-                                + ". Falta sentencia 'MATCH'\n");
+                                "Instruccion 'MATCH/CASE' no valida en la linea " + token.getRow() + "\n");
                     }
                     break;
                 case IDENTIFICADOR:
@@ -132,6 +131,24 @@ public class IndentationParser {
                         || token.getToken() == TokenType.CASE) {
                     if (nextToken != null && nextToken.getColumn() == token.getColumn()) {
                         showIndentError(nextToken);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < listIndent.size(); i++) {
+            if (token == listIndent.get(i)) {
+                Token lastToken = tool.getTokenList().get(tool.getTokenList().size() - 1);
+
+                if (token.getToken() == TokenType.CLASS || token.getToken() == TokenType.WHILE
+                        || token.getToken() == TokenType.FOR || token.getToken() == TokenType.IF
+                        || token.getToken() == TokenType.ELSE || token.getToken() == TokenType.ELIF
+                        || token.getToken() == TokenType.CASE) {
+                    if (token.getRow() == lastToken.getRow()) {
+                        tool.getConsole().setText(tool.getConsole().getText()
+                                + "Se esperaba bloque de codigo en la linea " + token.getRow() + "\n");
                     } else {
                         break;
                     }

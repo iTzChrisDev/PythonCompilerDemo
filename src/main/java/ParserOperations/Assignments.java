@@ -27,11 +27,17 @@ public class Assignments {
                 tool.incrementIndex();
                 if (isExpression()) {
                     flag = true;
+                    if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+                        tool.incrementIndex();
+                    }
                 } else {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         flag = true;
                         // System.out.println("VARIABLE DECLARADA");
                         tool.incrementIndex();
+                        if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+                            tool.incrementIndex();
+                        }
                     } else {
                         tool.showError("[NORMAL] Se esperaba valor");
                     }
@@ -40,11 +46,17 @@ public class Assignments {
                 tool.incrementIndex();
                 if (isExpression()) {
                     flag = true;
+                    if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+                        tool.incrementIndex();
+                    }
                 } else {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         flag = true;
                         // System.out.println("VARIABLE AUGGASING");
                         tool.incrementIndex();
+                        if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+                            tool.incrementIndex();
+                        }
                     } else {
                         tool.showError("[AUG] Se esperaba valor");
                     }
@@ -52,23 +64,6 @@ public class Assignments {
             } else {
                 tool.showError("[MAIN] Se esperaba operador");
             }
-        }
-
-        for (Token tkn : tool.getTokenList()) {
-            if (tkn.getRow() == tool.getCurrentToken().getRow()
-                    && tkn.getColumn() <= tool.getCurrentToken().getColumn()) {
-                if (tkn.getToken() == TokenType.PARENTESIS_APERTURA) {
-                    openParent.add(tkn.getColumn());
-                } else if (tkn.getToken() == TokenType.PARENTESIS_CIERRE) {
-                    closeParent.add(tkn.getColumn());
-                }
-            }
-        }
-
-        if (openParent.size() < closeParent.size()) {
-            tool.showError("Se esperaba '('");
-        } else if (openParent.size() > closeParent.size()) {
-            tool.showError("Se esperaba ')'");
         }
 
         return flag;
@@ -114,9 +109,27 @@ public class Assignments {
                     break;
                 }
             }
-        } else {
-            tool.showError("[EXP] Se esperaba un término");
         }
+
+        if (flag) {
+            for (Token tkn : tool.getTokenList()) {
+                if (tkn.getRow() == tool.getCurrentToken().getRow()
+                        && tkn.getColumn() <= tool.getCurrentToken().getColumn()) {
+                    if (tkn.getToken() == TokenType.PARENTESIS_APERTURA) {
+                        openParent.add(tkn.getColumn());
+                    } else if (tkn.getToken() == TokenType.PARENTESIS_CIERRE) {
+                        closeParent.add(tkn.getColumn());
+                    }
+                }
+            }
+
+            if (openParent.size() < closeParent.size()) {
+                tool.showError("Se esperaba '('");
+            } else if (openParent.size() > closeParent.size()) {
+                tool.showError("Se esperaba ')'");
+            }
+        }
+
         return flag;
     }
 
@@ -129,13 +142,11 @@ public class Assignments {
             while (tool.verifyToken(TokenType.MULTIPLICACION) || tool.verifyToken(TokenType.DIVISION)) {
                 tool.incrementIndex(); // Avanzar el operador
                 if (!isFactor()) {
-                    tool.showError("[TERM] Se esperaba valor después del operador aritmético");
+                    // tool.showError("[TERM] Se esperaba valor después del operador aritmético");
                     flag = false;
                     break;
                 }
             }
-        } else {
-            tool.showError("[TERM] Se esperaba un valor");
         }
         return flag;
     }

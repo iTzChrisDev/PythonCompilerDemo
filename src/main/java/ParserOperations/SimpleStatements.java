@@ -38,6 +38,9 @@ public class SimpleStatements {
                     if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                         flag = true;
                         tool.incrementIndex();
+                        if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+                            tool.incrementIndex();
+                        }
                     } else if (tool.verifyToken(TokenType.COMA)) {
                         tool.incrementIndex();
                         if (tool.isValueToken(tool.getCurrentToken())) {
@@ -45,12 +48,15 @@ public class SimpleStatements {
                             if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                                 tool.incrementIndex();
                                 flag = true;
+                                if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+                                    tool.incrementIndex();
+                                }
                             } else {
                                 tool.showError("Se esperaba ')'");
                                 flag = false;
                             }
                         } else {
-                            tool.showError("Se esperaba ','");
+                            tool.showError("Se esperaba valor despues de ','");
                             flag = false;
                         }
                     } else {

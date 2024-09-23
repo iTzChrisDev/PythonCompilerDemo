@@ -1,9 +1,12 @@
 package ParserOperations;
 
+import Tokens.Constants;
 import Tokens.Token;
 import Tokens.TokenType;
 
 import java.util.ArrayList;
+import java.util.Map;
+
 import javax.swing.JTextArea;
 
 public class Parser {
@@ -29,49 +32,60 @@ public class Parser {
     }
 
     public void parseCode() {
-        System.out.println("\nInicio Ejecución");
+        // System.out.println("\nInicio Ejecución");
         statements();
         ip.checkIndent();
-        System.out.println("Fin Ejecución");
+        // System.out.println("Fin Ejecución");
     }
 
     public void statements() {
-        if (tool.getIndex() != tool.getTokenList().size() - 1) {
-            // System.out.println(tool.getCurrentToken());
-            listIndent.add(tool.getCurrentToken());
-            if (cs.isCompoundStatement()) {
-                // CompoundStatement correcto
-                if (tool.getCurrentToken().getRow() != 1
-                        && tool.getTokenList().get(tool.getIndex() - 1).getRow() != tool.getCurrentToken().getRow()) {
-                    statements();
-                } else {
-                    if (tool.getCurrentToken().getRow() != tool.getTokenList().get(tool.getTokenList().size() - 1)
-                            .getRow()) {
-                        tool.showError("Se esperaba un salto de linea");
-                    }
-                }
 
-            } else if (ss.isSimpleStatement()) {
-                // SimpleStatement correcto
-                if (tool.getCurrentToken().getRow() != 1
-                        && tool.getTokenList().get(tool.getIndex() - 1).getRow() != tool.getCurrentToken().getRow()) {
-                    statements();
-                } else {
-                    if (tool.getCurrentToken().getRow() != tool.getTokenList().get(tool.getTokenList().size() - 1)
-                            .getRow()) {
-                        tool.showError("Se esperaba un salto de linea");
-                    }
+        // System.out.println(tool.getCurrentToken());
+        listIndent.add(tool.getCurrentToken());
+        if (cs.isCompoundStatement()) {
+            // CompoundStatement correcto
+            if (tool.getCurrentToken().getRow() != 1
+                    && tool.getTokenList().get(tool.getIndex() - 1).getRow() != tool.getCurrentToken().getRow()) {
+                statements();
+            } else {
+                if (tool.verifyToken(TokenType.DESCONOCIDO)) {
+                    tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
+                } else if (tool.getCurrentToken().getRow() != tool.getTokenList().get(tool.getTokenList().size() - 1)
+                        .getRow()) {
+                    tool.showError("Se esperaba un salto de linea");
                 }
-
-            } else if (tool.verifyToken(TokenType.DESCONOCIDO)) {
-                tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
-            } else if (tool.isAssignment(tool.getCurrentToken()) || tool.isOperator(tool.getCurrentToken())
-                    || tool.isRelationalOperator(tool.getCurrentToken())) {
-                tool.showError("Se encontró '" + tool.getCurrentToken().getLexeme() + "' fuera de lugar");
-            } else if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                tool.showError("Se esperaba instruccion antes de ':'");
             }
 
+        } else if (ss.isSimpleStatement()) {
+            // SimpleStatement correcto
+            if (tool.getCurrentToken().getRow() != 1
+                    && tool.getTokenList().get(tool.getIndex() - 1).getRow() != tool.getCurrentToken().getRow()) {
+                statements();
+            } else {
+                if (tool.verifyToken(TokenType.DESCONOCIDO)) {
+                    tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
+                } else if (tool.getCurrentToken().getRow() != tool.getTokenList().get(tool.getTokenList().size() - 1)
+                        .getRow()) {
+                    tool.showError("Se esperaba un salto de linea");
+                }
+            }
+
+        } else if (tool.verifyToken(TokenType.DESCONOCIDO)) {
+            tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
+        } else if (!tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+            checkTokensUnfound(Constants.DELIMITERS);
+            checkTokensUnfound(Constants.OPERATORS);
+            checkTokensUnfound(Constants.RESERVED_WORDS);
+        }
+    }
+
+    private void checkTokensUnfound(Map<String, TokenType> tokenMap) {
+        for (TokenType tkn : tokenMap.values()) {
+            if (tkn == tool.getCurrentToken().getToken()) {
+                tool.showError("Se encontró '" + tool.getCurrentToken().getLexeme()
+                        + "' fuera de un bloque de codigo");
+                tool.incrementIndex();
+            }
         }
     }
 }
