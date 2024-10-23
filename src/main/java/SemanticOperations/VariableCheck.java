@@ -22,6 +22,7 @@ public class VariableCheck {
     }
 
     public void check() {
+        console.setText("");
         varAux = new ArrayList<>();
         variables = new ArrayList<>();
         rowsVariables = new ArrayList<>();
@@ -90,13 +91,21 @@ public class VariableCheck {
             } else {
                 System.out.println("Expression aritmetica");
                 for (int i = 2; i < row.size(); i++) {
+                    var.setName(row.get(0).getLexeme());
+                    var.setRow(row.get(0).getRow());
                     expression += row.get(i).getLexeme();
                 }
-                //Comprobar y remplazar numeros y variables
+                // Comprobar y remplazar numeros y variables
                 for (Variable variable : variables) {
                     if (expression.contains(variable.getName())) {
                         // Validar operaciones aritmeticas
+                        expression.replace(variable.getName(), variable.getValue());
                     }
+                }
+                if (expression.length() > 0) {
+                    var.setType(TokenType.NONE);
+                    var.setState("DECLARADA");
+                    var.setValue(expression);
                 }
                 System.out.println(expression);
             }
@@ -114,6 +123,12 @@ public class VariableCheck {
         }
 
         if (var.getType() == TokenType.DESCONOCIDO) {
+            for (int i = 0; i < row.size(); i++) {
+                if (row.size() == 2) {
+                    var.setName(row.get(0).getLexeme());
+                    var.setRow(row.get(0).getRow());
+                }
+            }
             var.setState("NO DECLARADA");
             var.setValue("?");
             showError("[SEMANTICO] Variable no declarada", var.getRow());
