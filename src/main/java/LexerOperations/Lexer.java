@@ -216,7 +216,8 @@ public class Lexer {
             if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("{")) {
                 tokenType = TokenType.IDENTIFICADOR_CONJUNTO;
             } else if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("(")) {
-                tokenType = TokenType.IDENTIFICADOR_TUPLA;
+                // tokenType = TokenType.IDENTIFICADOR_TUPLA;
+                tokenType = TokenType.IDENTIFICADOR;
             } else if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("[")) {
                 tokenType = TokenType.IDENTIFICADOR_LISTA;
             } else {

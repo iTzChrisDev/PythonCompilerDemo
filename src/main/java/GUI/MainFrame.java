@@ -4,6 +4,8 @@ import Files.FileManager;
 import GUI.CustomComponents.NumeroLinea;
 import LexerOperations.Lexer;
 import ParserOperations.Parser;
+import SemanticOperations.Variable;
+import SemanticOperations.VariableCheck;
 import Tokens.Token;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -24,6 +26,7 @@ public class MainFrame extends javax.swing.JFrame {
     private DefaultTableModel tbModel;
     private Lexer lexer;
     private Parser parser;
+    private VariableCheck var;
 
     public MainFrame() {
         initComponents();
@@ -58,16 +61,20 @@ public class MainFrame extends javax.swing.JFrame {
         btnFOR = new GUI.CustomComponents.Button();
         btnWHILE = new GUI.CustomComponents.Button();
         btnSWITCH = new GUI.CustomComponents.Button();
-        pnlCodeArea = new GUI.CustomComponents.PanelRound();
-        scrollCode = new javax.swing.JScrollPane();
-        txtCode = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
         pnlLexer = new GUI.CustomComponents.PanelRound();
         scrollTokens = new javax.swing.JScrollPane();
         tableTokens = new javax.swing.JTable();
+        pnlSemantic = new GUI.CustomComponents.PanelRound();
+        scrollVariables = new javax.swing.JScrollPane();
+        tableVariables = new javax.swing.JTable();
         pnlParser = new GUI.CustomComponents.PanelRound();
         scrollCode1 = new javax.swing.JScrollPane();
         txtConsole = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
+        pnlCodeArea = new GUI.CustomComponents.PanelRound();
+        scrollCode = new javax.swing.JScrollPane();
+        txtCode = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -233,26 +240,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         pnlMain.add(pnlNavBar, java.awt.BorderLayout.NORTH);
 
-        pnlCodeArea.setBackground(new java.awt.Color(23, 21, 23));
-        pnlCodeArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        pnlCodeArea.setRound(10);
-        pnlCodeArea.setLayout(new java.awt.GridLayout(1, 0));
-
-        scrollCode.setBackground(new java.awt.Color(23, 21, 23));
-        scrollCode.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(40, 137, 199)));
-        scrollCode.setPreferredSize(new java.awt.Dimension(800, 400));
-
-        txtCode.setBackground(new java.awt.Color(23, 21, 23));
-        txtCode.setColumns(20);
-        txtCode.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
-        txtCode.setRows(5);
-        txtCode.setTabSize(4);
-        txtCode.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        scrollCode.setViewportView(txtCode);
-
-        pnlCodeArea.add(scrollCode);
-
-        pnlMain.add(pnlCodeArea, java.awt.BorderLayout.CENTER);
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new java.awt.GridLayout(2, 1, 5, 5));
 
         pnlLexer.setBackground(new java.awt.Color(23, 21, 23));
         pnlLexer.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -277,7 +266,35 @@ public class MainFrame extends javax.swing.JFrame {
 
         pnlLexer.add(scrollTokens);
 
-        pnlMain.add(pnlLexer, java.awt.BorderLayout.EAST);
+        jPanel3.add(pnlLexer);
+
+        pnlSemantic.setBackground(new java.awt.Color(23, 21, 23));
+        pnlSemantic.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnlSemantic.setPreferredSize(new java.awt.Dimension(200, 220));
+        pnlSemantic.setRound(10);
+        pnlSemantic.setLayout(new java.awt.GridLayout());
+
+        scrollVariables.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(40, 137, 199)));
+        scrollVariables.setPreferredSize(new java.awt.Dimension(452, 200));
+
+        tableVariables.setBackground(new java.awt.Color(23, 21, 23));
+        tableVariables.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        tableVariables.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Variable", "Tipo", "Valor", "Estado", "Fila"
+            }
+        ));
+        tableVariables.setEnabled(false);
+        scrollVariables.setViewportView(tableVariables);
+
+        pnlSemantic.add(scrollVariables);
+
+        jPanel3.add(pnlSemantic);
+
+        pnlMain.add(jPanel3, java.awt.BorderLayout.EAST);
 
         pnlParser.setBackground(new java.awt.Color(23, 21, 23));
         pnlParser.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -308,11 +325,32 @@ public class MainFrame extends javax.swing.JFrame {
 
         pnlMain.add(pnlParser, java.awt.BorderLayout.PAGE_END);
 
+        pnlCodeArea.setBackground(new java.awt.Color(23, 21, 23));
+        pnlCodeArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnlCodeArea.setRound(10);
+        pnlCodeArea.setLayout(new java.awt.GridLayout(1, 0));
+
+        scrollCode.setBackground(new java.awt.Color(23, 21, 23));
+        scrollCode.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(40, 137, 199)));
+        scrollCode.setPreferredSize(new java.awt.Dimension(800, 400));
+
+        txtCode.setBackground(new java.awt.Color(23, 21, 23));
+        txtCode.setColumns(20);
+        txtCode.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
+        txtCode.setRows(5);
+        txtCode.setTabSize(4);
+        txtCode.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        scrollCode.setViewportView(txtCode);
+
+        pnlCodeArea.add(scrollCode);
+
+        pnlMain.add(pnlCodeArea, java.awt.BorderLayout.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,6 +388,11 @@ public class MainFrame extends javax.swing.JFrame {
             // ANALIZADOR SINTACTICO
             parser = new Parser(lexer.getTokenList(), txtConsole);
             parser.parseCode();
+
+            // ANALIZADOR SEMANTICO
+            var = new VariableCheck(lexer.getTokenList(), txtConsole);
+            var.check();
+            fillVar();
         } else {
             jLabel1.setText("Output");
             JOptionPane.showMessageDialog(null, "No hay código en el editor", "Atención!",
@@ -438,6 +481,41 @@ public class MainFrame extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
+    
+    public void fillVar() {
+        tbModel = new DefaultTableModel();
+        tbModel.setRowCount(0);
+        tbModel.addColumn("Variable");
+        tbModel.addColumn("Tipo");
+        tbModel.addColumn("Valor");
+        tbModel.addColumn("Estado");
+        tbModel.addColumn("Fila");
+
+        for (Variable var : var.getVariables()) {
+            tbModel.addRow(new Object[]{var.getName(), var.getType(), var.getValue(), var.getState(), var.getRow()});
+        }
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tableVariables.setDefaultRenderer(Object.class, centerRenderer);
+
+        tableVariables.setModel(tbModel);
+
+        TableColumnModel columnModel = tableVariables.getColumnModel();
+        for (int column = 0; column < tableVariables.getColumnCount(); column++) {
+            TableColumn tableColumn = columnModel.getColumn(column);
+            int preferredWidth = 0;
+
+            for (int i = 0; i < tableVariables.getRowCount(); i++) {
+                TableCellRenderer cellRenderer = tableVariables.getCellRenderer(i, column);
+                Component c = tableVariables.prepareRenderer(cellRenderer, i, column);
+                int width = c.getPreferredSize().width + tableVariables.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+            }
+
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -491,15 +569,19 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private GUI.CustomComponents.PanelRound pnlCodeArea;
     private GUI.CustomComponents.PanelRound pnlLexer;
     private javax.swing.JPanel pnlMain;
     private GUI.CustomComponents.PanelRound pnlNavBar;
     private GUI.CustomComponents.PanelRound pnlParser;
+    private GUI.CustomComponents.PanelRound pnlSemantic;
     private javax.swing.JScrollPane scrollCode;
     private javax.swing.JScrollPane scrollCode1;
     private javax.swing.JScrollPane scrollTokens;
+    private javax.swing.JScrollPane scrollVariables;
     private javax.swing.JTable tableTokens;
+    private javax.swing.JTable tableVariables;
     private javax.swing.JTextArea txtCode;
     private javax.swing.JTextArea txtConsole;
     // End of variables declaration//GEN-END:variables

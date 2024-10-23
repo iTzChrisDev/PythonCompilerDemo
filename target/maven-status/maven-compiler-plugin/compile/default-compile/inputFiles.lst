@@ -1,6 +1,5 @@
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\GUI\CustomComponents\NumeroLinea.java
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\GUI\MainFrame.java
-C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\ParserOperations\AssignParser.java
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\ParserOperations\Parser.java
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\ParserOperations\Utilities.java
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\ParserOperations\ExpressionParser.java
@@ -15,4 +14,6 @@ C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\ParserOpe
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\Files\FileManager.java
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\LexerOperations\Lexer.java
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\Tokens\TokenType.java
+C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\SemanticOperations\Variable.java
 C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\Tokens\Constants.java
+C:\Users\iTzChrisDev\Documents\GitHub\PythonCompilerDemo\src\main\java\SemanticOperations\VariableCheck.java
