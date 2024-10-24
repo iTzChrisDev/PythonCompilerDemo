@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JTextArea;
 
 import ParserOperations.Utilities;
+import Tokens.Constants;
 import Tokens.Token;
 import Tokens.TokenType;
 
@@ -61,10 +62,99 @@ public class VariableCheck {
             assignData(row);
         }
 
-        // for (Variable var : variables) {
-        // System.out.println(var.toString());
+        for (Variable var : variables) {
+            if (var.getType().equals(TokenType.NONE)) {
+                var.setType(setVarType(var.getValue(), var.getRow()));
+            }
+        }
+    }
+
+    private TokenType setVarType(String expression, int row) {
+        TokenType type = TokenType.DESCONOCIDO;
+        char chars[] = expression.toCharArray();
+        ArrayList<String> values = new ArrayList<>();
+        String currentString = "";
+        int contInt = 0, contFloat = 0, contBool = 0, contString = 0;
+
+        for (char c : chars) {
+            if (isOperator(c)) {
+                values.add(String.valueOf(c));
+                if (!currentString.isBlank()) {
+                    values.add(currentString);
+                    currentString = "";
+                }
+            } else {
+                currentString += c;
+            }
+        }
+
+        int index = 0;
+        for (String val : values) {
+            for (Variable variable : variables) {
+                if (val.equals(variable.getName())) {
+                    values.set(index, val.replace(val, variable.getValue()));
+                    break;
+                }
+            }
+            index++;
+        }
+
+        //VERIFICAR EL ESTILO DE ASIGNACION DE TIPO A CADA EXPRESION COMPLEJA
+        
+        // System.out.println("\nValores de la expresion");
+        // for (String val : values) {
+        // System.out.println(val);
         // }
-        // System.out.println("\n");
+
+        // for (String value : values) {
+        //     if (value.contains("\"")) {
+        //         contString++;
+        //     } else if (value.equals("True") || value.equals("False")) {
+        //         contBool++;
+        //     } else {
+        //         int aux = 0;
+        //         int dots = 0;
+        //         for (char c : value.toCharArray()) {
+        //             if (Constants.NUMBER_CHARS.contains(String.valueOf(c))) {
+        //                 if (c == '.') {
+        //                     dots++;
+        //                 }
+        //                 aux++;
+        //             }
+        //         }
+
+        //         if (aux != 0 && dots == 0) {
+        //             contInt++;
+        //         } else if (aux != 0 && dots > 0) {
+        //             contFloat++;
+        //         }
+        //     }
+        // }
+
+        // if (contInt > 0 && contBool == 0 && contString == 0 && contFloat >= 0) {
+        //     type = (contFloat == 0) ? TokenType.ENTERO : TokenType.DECIMAL;
+        // } else if (contString > 0 && contBool == 0 && contFloat == 0 && contInt == 0) {
+        //     type = TokenType.CADENA;
+        // } else if (contBool > 0 && contString == 0 && contFloat == 0 && contInt == 0) {
+        //     type = TokenType.BOOLEAN;
+        // } else {
+        //     type = TokenType.DESCONOCIDO;
+        //     showError("[SEMANTICO] Asignación de diferentes tipos", row);
+        // }
+
+        return type;
+    }
+
+    private boolean isOperator(char c) {
+        char operadores[] = { '+', '-', '*', '/', '(', ')' };
+        boolean flag = false;
+        for (char op : operadores) {
+            if (c == op) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
     }
 
     private void assignData(ArrayList<Token> row) {
@@ -89,7 +179,7 @@ public class VariableCheck {
                     }
                 }
             } else {
-                System.out.println("Expression aritmetica");
+                // System.out.println("Expression aritmetica");
                 for (int i = 2; i < row.size(); i++) {
                     var.setName(row.get(0).getLexeme());
                     var.setRow(row.get(0).getRow());
@@ -107,7 +197,6 @@ public class VariableCheck {
                     var.setState("DECLARADA");
                     var.setValue(expression);
                 }
-                System.out.println(expression);
             }
 
         } else if (type == TokenType.FOR) {
@@ -133,7 +222,6 @@ public class VariableCheck {
             var.setValue("?");
             showError("[SEMANTICO] Variable no declarada", var.getRow());
         }
-
         variables.add(var);
     }
 
