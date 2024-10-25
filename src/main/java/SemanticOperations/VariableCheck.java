@@ -75,19 +75,24 @@ public class VariableCheck {
         ArrayList<String> values = new ArrayList<>();
         String currentString = "";
         int contInt = 0, contFloat = 0, contBool = 0, contString = 0;
-
+    
         for (char c : chars) {
             if (isOperator(c)) {
-                values.add(String.valueOf(c));
                 if (!currentString.isBlank()) {
                     values.add(currentString);
                     currentString = "";
                 }
+                values.add(String.valueOf(c)); // Agrega el operador
             } else {
                 currentString += c;
             }
         }
-
+    
+        // Agregar el último valor en currentString si es que hay algo
+        if (!currentString.isBlank()) {
+            values.add(currentString);
+        }
+    
         int index = 0;
         for (String val : values) {
             for (Variable variable : variables) {
@@ -98,64 +103,24 @@ public class VariableCheck {
             }
             index++;
         }
-
-        //VERIFICAR EL ESTILO DE ASIGNACION DE TIPO A CADA EXPRESION COMPLEJA
-        
-        // System.out.println("\nValores de la expresion");
-        // for (String val : values) {
-        // System.out.println(val);
-        // }
-
-        // for (String value : values) {
-        //     if (value.contains("\"")) {
-        //         contString++;
-        //     } else if (value.equals("True") || value.equals("False")) {
-        //         contBool++;
-        //     } else {
-        //         int aux = 0;
-        //         int dots = 0;
-        //         for (char c : value.toCharArray()) {
-        //             if (Constants.NUMBER_CHARS.contains(String.valueOf(c))) {
-        //                 if (c == '.') {
-        //                     dots++;
-        //                 }
-        //                 aux++;
-        //             }
-        //         }
-
-        //         if (aux != 0 && dots == 0) {
-        //             contInt++;
-        //         } else if (aux != 0 && dots > 0) {
-        //             contFloat++;
-        //         }
-        //     }
-        // }
-
-        // if (contInt > 0 && contBool == 0 && contString == 0 && contFloat >= 0) {
-        //     type = (contFloat == 0) ? TokenType.ENTERO : TokenType.DECIMAL;
-        // } else if (contString > 0 && contBool == 0 && contFloat == 0 && contInt == 0) {
-        //     type = TokenType.CADENA;
-        // } else if (contBool > 0 && contString == 0 && contFloat == 0 && contInt == 0) {
-        //     type = TokenType.BOOLEAN;
-        // } else {
-        //     type = TokenType.DESCONOCIDO;
-        //     showError("[SEMANTICO] Asignación de diferentes tipos", row);
-        // }
-
+    
+        for (String val : values) {
+            System.out.println(val);
+        }
+    
         return type;
     }
-
+    
     private boolean isOperator(char c) {
         char operadores[] = { '+', '-', '*', '/', '(', ')' };
-        boolean flag = false;
         for (char op : operadores) {
             if (c == op) {
-                flag = true;
-                break;
+                return true;
             }
         }
-        return flag;
+        return false;
     }
+    
 
     private void assignData(ArrayList<Token> row) {
         Variable var = new Variable("", TokenType.DESCONOCIDO, "", 0, "NO DECLARADA");
