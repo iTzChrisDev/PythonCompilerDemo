@@ -5,6 +5,7 @@ import GUI.CustomComponents.NumeroLinea;
 import LexerOperations.Lexer;
 import ParserOperations.Parser;
 import SemanticOperations.Variable;
+import SemanticOperations.VariableAssignment;
 import SemanticOperations.VariableCheck;
 import Tokens.Token;
 import java.awt.Component;
@@ -26,7 +27,8 @@ public class MainFrame extends javax.swing.JFrame {
     private DefaultTableModel tbModel;
     private Lexer lexer;
     private Parser parser;
-    private VariableCheck var;
+    // private VariableCheck var;
+    private VariableAssignment semantic;
 
     public MainFrame() {
         initComponents();
@@ -45,7 +47,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlMain = new javax.swing.JPanel();
@@ -119,7 +122,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         btnClear.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnClear.setForeground(new java.awt.Color(255, 255, 255));
-        btnClear.setIcon(new javax.swing.ImageIcon("C:\\Users\\iTzChrisDev\\Documents\\GitHub\\PythonCompilerDemo\\src\\main\\java\\Resources\\clear.png")); // NOI18N
+        btnClear.setIcon(new javax.swing.ImageIcon(
+                "C:\\Users\\iTzChrisDev\\Documents\\GitHub\\PythonCompilerDemo\\src\\main\\java\\Resources\\clear.png")); // NOI18N
         btnClear.setText("Clear");
         btnClear.setBorderColor(new java.awt.Color(102, 102, 102));
         btnClear.setColor(new java.awt.Color(102, 102, 102));
@@ -254,13 +258,12 @@ public class MainFrame extends javax.swing.JFrame {
         tableTokens.setBackground(new java.awt.Color(23, 21, 23));
         tableTokens.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         tableTokens.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null}
-            },
-            new String [] {
-                "Lexema", "Token", "Fila", "Columna"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null }
+                },
+                new String[] {
+                        "Lexema", "Token", "Fila", "Columna"
+                }));
         tableTokens.setEnabled(false);
         scrollTokens.setViewportView(tableTokens);
 
@@ -280,13 +283,12 @@ public class MainFrame extends javax.swing.JFrame {
         tableVariables.setBackground(new java.awt.Color(23, 21, 23));
         tableVariables.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         tableVariables.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Variable", "Tipo", "Valor", "Estado", "Fila"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null, null }
+                },
+                new String[] {
+                        "Variable", "Tipo", "Valor", "Estado", "Fila"
+                }));
         tableVariables.setEnabled(false);
         scrollVariables.setViewportView(tableVariables);
 
@@ -349,20 +351,18 @@ public class MainFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnClearActionPerformed
         txtCode.setText("");
-    }//GEN-LAST:event_btnClearActionPerformed
+    }// GEN-LAST:event_btnClearActionPerformed
 
     private void btnOpenFileActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnOpenFileActionPerformed
         JFileChooser fileChooser = new JFileChooser();
@@ -390,8 +390,10 @@ public class MainFrame extends javax.swing.JFrame {
             parser.parseCode();
 
             // ANALIZADOR SEMANTICO
-            var = new VariableCheck(lexer.getTokenList(), txtConsole);
-            var.check();
+            // var = new VariableCheck(lexer.getTokenList(), txtConsole);
+            // var.check();
+            semantic = new VariableAssignment(lexer.getTokenList());
+            semantic.checkVars();
             fillVar();
         } else {
             jLabel1.setText("Output");
@@ -457,7 +459,7 @@ public class MainFrame extends javax.swing.JFrame {
         tbModel.addColumn("Columna");
 
         for (Token lex : lexer.getTokenList()) {
-            tbModel.addRow(new Object[]{lex.getLexeme(), lex.getToken(), lex.getRow(), lex.getColumn()});
+            tbModel.addRow(new Object[] { lex.getLexeme(), lex.getToken(), lex.getRow(), lex.getColumn() });
         }
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -481,7 +483,7 @@ public class MainFrame extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
-    
+
     public void fillVar() {
         tbModel = new DefaultTableModel();
         tbModel.setRowCount(0);
@@ -491,8 +493,8 @@ public class MainFrame extends javax.swing.JFrame {
         tbModel.addColumn("Estado");
         tbModel.addColumn("Fila");
 
-        for (Variable var : var.getVariables()) {
-            tbModel.addRow(new Object[]{var.getName(), var.getType(), var.getValue(), var.getState(), var.getRow()});
+        for (Variable var : semantic.getVariables()) {
+            tbModel.addRow(new Object[] { var.getName(), var.getType(), var.getValue(), var.getState(), var.getRow() });
         }
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
