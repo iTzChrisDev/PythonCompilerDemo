@@ -6,7 +6,6 @@ import LexerOperations.Lexer;
 import ParserOperations.Parser;
 import SemanticOperations.Variable;
 import SemanticOperations.VariableAssignment;
-import SemanticOperations.VariableCheck;
 import Tokens.Token;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -393,7 +392,7 @@ public class MainFrame extends javax.swing.JFrame {
             // var = new VariableCheck(lexer.getTokenList(), txtConsole);
             // var.check();
             semantic = new VariableAssignment(lexer.getTokenList());
-            semantic.checkVars();
+            semantic.analizeSemantic();
             fillVar();
         } else {
             jLabel1.setText("Output");
@@ -494,7 +493,7 @@ public class MainFrame extends javax.swing.JFrame {
         tbModel.addColumn("Fila");
 
         for (Variable var : semantic.getVariables()) {
-            tbModel.addRow(new Object[] { var.getName(), var.getType(), var.getValue(), var.getState(), var.getRow() });
+            tbModel.addRow(new Object[] { var.getVarName(), var.getType(), var.getValue(), var.getState(), var.getRow() });
         }
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

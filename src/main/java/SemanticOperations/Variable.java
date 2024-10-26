@@ -7,9 +7,9 @@ public class Variable {
     private TokenType type;
     private String value;
     private int row;
-    private String state;
+    private State state;
 
-    public Variable(String name, TokenType type, String value, int row, String state) {
+    public Variable(String name, TokenType type, String value, int row, State state) {
         this.name = name;
         this.type = type;
         this.value = value;
@@ -23,11 +23,11 @@ public class Variable {
                 + "]";
     }
 
-    public String getName() {
+    public String getVarName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setVarName(String name) {
         this.name = name;
     }
 
@@ -55,11 +55,11 @@ public class Variable {
         this.row = row;
     }
 
-    public String getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(State state) {
         this.state = state;
     }
 
