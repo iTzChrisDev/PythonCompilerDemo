@@ -10,6 +10,7 @@ public enum TokenType {
     MATCH,
     CASE,
     // PALABRAS RESERVADAS
+    ERROR,
     BOOLEAN,
     NONE,
     AS,

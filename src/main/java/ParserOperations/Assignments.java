@@ -33,6 +33,11 @@ public class Assignments {
                     if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
                         tool.incrementIndex();
                     }
+                } else if (isStringConcat()) {
+                    flag = true;
+                    if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
+                        tool.incrementIndex();
+                    }
                 } else {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         flag = true;
@@ -89,6 +94,26 @@ public class Assignments {
             tool.showError("Se esperaba '('");
         } else if (openParent.size() > closeParent.size()) {
             tool.showError("Se esperaba ')'");
+        }
+        return flag;
+    }
+
+    public boolean isStringConcat() {
+        boolean flag = false;
+        Token tkn = tool.getCurrentToken();
+        if (tool.verifyToken(TokenType.CADENA) || tool.verifyToken(TokenType.IDENTIFICADOR)) {
+            tool.incrementIndex();
+            if (tool.verifyToken(TokenType.SUMA)) {
+                tool.incrementIndex();
+                isStringConcat();
+            } else {
+                if (tool.getCurrentToken().getRow() == tkn.getRow()) {
+                    tool.showError("No se reconoce la expresión");
+                    flag = false;
+                } else {
+                    flag = true;
+                }
+            }
         }
         return flag;
     }

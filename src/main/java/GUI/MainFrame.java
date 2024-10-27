@@ -391,7 +391,7 @@ public class MainFrame extends javax.swing.JFrame {
             // ANALIZADOR SEMANTICO
             // var = new VariableCheck(lexer.getTokenList(), txtConsole);
             // var.check();
-            semantic = new VariableAssignment(lexer.getTokenList());
+            semantic = new VariableAssignment(txtConsole, lexer.getTokenList());
             semantic.analizeSemantic();
             fillVar();
         } else {
@@ -493,7 +493,8 @@ public class MainFrame extends javax.swing.JFrame {
         tbModel.addColumn("Fila");
 
         for (Variable var : semantic.getVariables()) {
-            tbModel.addRow(new Object[] { var.getVarName(), var.getType(), var.getValue(), var.getState(), var.getRow() });
+            tbModel.addRow(
+                    new Object[] { var.getVarName(), var.getType(), var.getValue(), var.getState(), var.getRow() });
         }
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
