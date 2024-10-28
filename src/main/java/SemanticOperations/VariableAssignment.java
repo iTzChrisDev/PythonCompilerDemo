@@ -14,17 +14,21 @@ import Tokens.TokenType;
 public class VariableAssignment {
     private static List<Character> especialChars = List.of('+', '-', '*', '/', '(', ')');
     private ArrayList<Token> tokenList;
-    private ArrayList<Variable> variables;
+    public static ArrayList<Variable> variables;
+    private ConditionalCheck conditions;
     private JTextArea console;
 
     public VariableAssignment(JTextArea console, ArrayList<Token> tokenList) {
         this.tokenList = tokenList;
         this.console = console;
+        conditions = new ConditionalCheck(console, tokenList);
+        variables = new ArrayList<>();
     }
 
     public void analizeSemantic() {
         checkVars();
         evalExpressions();
+        conditions.check();
     }
 
     private void evalExpressions() {
@@ -44,7 +48,7 @@ public class VariableAssignment {
                             values.set(i, variable.getValue());
                             break;
                         } else {
-                            showError("[Semantico] No se reconoce '" + value + "'", entry.getKey());
+                            showError("[SEMANTICO] No se reconoce '" + value + "'", entry.getKey());
                         }
                     }
                 }
@@ -107,7 +111,7 @@ public class VariableAssignment {
                 for (String item : row) {
                     if (item.equals("+")) {
                     } else if (item.equals("-") || item.equals("*") || item.equals("/")) {
-                        showError("[Semantico] Concatenación incorrecta", variable.getRow());
+                        showError("[SEMANTICO] Concatenación incorrecta", variable.getRow());
                     }
                 }
             }
@@ -141,7 +145,7 @@ public class VariableAssignment {
         }
 
         if (type == TokenType.NONE) {
-            showError("[Semantico] Asignacion incorrecta", row);
+            showError("[SEMANTICO] Asignacion incorrecta", row);
         }
     }
 
@@ -217,7 +221,6 @@ public class VariableAssignment {
     }
 
     private void checkVars() {
-        variables = new ArrayList<>();
         String expression = "";
         for (int i = 0; i < tokenList.size(); i++) {
             try {
