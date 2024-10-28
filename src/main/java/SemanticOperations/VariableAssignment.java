@@ -1,12 +1,14 @@
 package SemanticOperations;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JTextArea;
 
+import ParserOperations.Utilities;
 import Tokens.Constants;
 import Tokens.Token;
 import Tokens.TokenType;
@@ -17,18 +19,73 @@ public class VariableAssignment {
     public static ArrayList<Variable> variables;
     private ConditionalCheck conditions;
     private JTextArea console;
+    private Utilities tool;
 
     public VariableAssignment(JTextArea console, ArrayList<Token> tokenList) {
         this.tokenList = tokenList;
         this.console = console;
         conditions = new ConditionalCheck(console, tokenList);
         variables = new ArrayList<>();
+        tool = new Utilities();
     }
 
     public void analizeSemantic() {
         checkVars();
         evalExpressions();
+        evalComplexExpressions();
         conditions.check();
+
+        for (Token token : getLastTokensByRow(tool.getTokenList())) {
+            if (tool.isOperator(token)) {
+                tool.getConsole().setText(tool.getConsole().getText() + "Se esperaba salto de linea en la linea "
+                        + token.getRow() + "\n");
+                for (Variable var : variables) {
+                    if (var.getRow() == token.getRow()) {
+                        var.setState(State.INDEFINIDO);
+                        var.setType(TokenType.NONE);
+                        var.setValue("null");
+                    }
+                }
+            }
+        }
+    }
+
+    public static ArrayList<Token> getLastTokensByRow(List<Token> tokens) {
+        Map<Integer, Token> lastTokenMap = new HashMap<>();
+        for (Token token : tokens) {
+            int row = token.getRow();
+            lastTokenMap.put(row, token);
+        }
+        return new ArrayList<>(lastTokenMap.values());
+    }
+
+    private void evalComplexExpressions() {
+        for (Variable var : variables) {
+            if (var.getType().equals(TokenType.ENTERO) || var.getType().equals(TokenType.DECIMAL)) {
+                try {
+                    double resultado = ExpressionEval.eval(var.getValue());
+                    DecimalFormat df = new DecimalFormat("#.####");
+
+                    if (isInteger(resultado)) {
+                        var.setValue(String.valueOf((int) resultado));
+                    } else {
+                        var.setValue(df.format(resultado));
+                    }
+
+                } catch (IllegalArgumentException | EmptyStackException e) {
+                    System.err.println("Error en la expresión: " + e.getMessage());
+                    var.setState(State.INDEFINIDO);
+                    var.setType(TokenType.NONE);
+                }
+            } else if (var.getType().equals(TokenType.CADENA)) {
+                String resultado = ExpressionEval.evalStrings(var.getValue());
+                var.setValue(resultado);
+            }
+        }
+    }
+
+    private boolean isInteger(double numero) {
+        return numero % 1 == 0;
     }
 
     private void evalExpressions() {
@@ -202,21 +259,34 @@ public class VariableAssignment {
     private ArrayList<String> splitExpression(String value) {
         ArrayList<String> exp = new ArrayList<>();
         String aux = "";
+        boolean inQuote = false;
 
         for (char c : value.toCharArray()) {
-            if (!Character.isWhitespace(c)) {
-                if (especialChars.contains(c)) {
-                    if (aux.length() > 0) {
-                        exp.add(aux.toString());
-                        aux = "";
-                    }
-                    exp.add(String.valueOf(c));
+            if (c == '"') {
+                inQuote = !inQuote;
+                if (inQuote) {
+                    aux += Character.toString(c);
                 } else {
-                    aux += c;
+                    aux += Character.toString(c);
+                    exp.add(aux.toString());
+                    aux = "";
                 }
+            } else if (Character.isWhitespace(c)) {
+
+                if (inQuote) {
+                    aux += Character.toString(c);
+                }
+            } else if (especialChars.contains(c)) {
+
+                if (aux.length() > 0) {
+                    exp.add(aux.toString());
+                    aux = "";
+                }
+                exp.add(String.valueOf(c));
+            } else {
+                aux += Character.toString(c);
             }
         }
-
         if (aux.length() > 0) {
             exp.add(aux);
         }

@@ -27,7 +27,7 @@ public class Utilities {
                 || tkn.getToken().equals(TokenType.MULTIPLICACION_ASIGNACION);
     }
 
-    protected boolean isOperator(Token tkn) {
+    public boolean isOperator(Token tkn) {
         return tkn.getToken().equals(TokenType.SUMA)
                 || tkn.getToken().equals(TokenType.RESTA)
                 || tkn.getToken().equals(TokenType.DIVISION)
@@ -85,11 +85,11 @@ public class Utilities {
         return index;
     }
 
-    protected static void setTokenList(ArrayList<Token> newTokenList) {
+    public static void setTokenList(ArrayList<Token> newTokenList) {
         Utilities.tokenList = newTokenList;
     }
 
-    protected static ArrayList<Token> getTokenList() {
+    public static ArrayList<Token> getTokenList() {
         return tokenList;
     }
 

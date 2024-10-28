@@ -49,7 +49,7 @@ public class Parser {
                 statements();
             } else {
                 if (tool.verifyToken(TokenType.DESCONOCIDO)) {
-                    tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
+                    tool.showError("[SEMANTICO] No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
                 } else if (tool.getCurrentToken().getRow() != tool.getTokenList().get(tool.getTokenList().size() - 1)
                         .getRow()) {
                     tool.showError("Se esperaba un salto de linea");
@@ -63,7 +63,7 @@ public class Parser {
                 statements();
             } else {
                 if (tool.verifyToken(TokenType.DESCONOCIDO)) {
-                    tool.showError("No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
+                    tool.showError("[SEMANTICO] No se reconoce '" + tool.getCurrentToken().getLexeme() + "'");
                 } else if (tool.getCurrentToken().getRow() != tool.getTokenList().get(tool.getTokenList().size() - 1)
                         .getRow()) {
                     tool.showError("Se esperaba un salto de linea");
