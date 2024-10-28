@@ -45,8 +45,14 @@ public class VariableAssignment {
                 for (Variable variable : variables) {
                     if (variable.getVarName().equals(value)) {
                         if (variable.getRow() < entry.getKey()) {
-                            values.set(i, variable.getValue());
-                            break;
+                            if (variable.getValue().isBlank()) {
+                                variable.setType(TokenType.NONE);
+                                variable.setState(State.INDEFINIDO);
+                                showError("[SEMANTICO] No se reconoce '" + value + "'", entry.getKey());
+                            } else {
+                                values.set(i, variable.getValue());
+                                break;
+                            }
                         } else {
                             showError("[SEMANTICO] No se reconoce '" + value + "'", entry.getKey());
                         }
@@ -102,6 +108,7 @@ public class VariableAssignment {
             }
             // Asignar Tipo a cada variable
             assignDataTypes(entry.getKey(), contInt, contDec, contBool, contString, error);
+
         }
 
         for (Variable variable : variables) {
@@ -187,11 +194,8 @@ public class VariableAssignment {
                 type = TokenType.DECIMAL;
             } else if (dots == 0 && cont == value.length()) {
                 type = TokenType.ENTERO;
-            } else {
-                type = TokenType.NONE;
             }
         }
-
         return type;
     }
 

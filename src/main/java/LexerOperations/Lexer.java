@@ -208,29 +208,41 @@ public class Lexer {
      */
     private boolean isIdentifier(String lexeme, int tknIndex) {
         boolean val = false;
+    
+        // Verifica si el token anterior es una excepción
         if (tknIndex >= 1 && tokenList.get(tknIndex - 1).getToken() == TokenType.EXCEPT) {
             tokenType = TokenType.IDENTIFICADOR_EXCEPCION;
             val = !val;
         }
+    
+        // Verifica si el siguiente token es '=' y si hay un valor válido después
         if (tknIndex < tokenList.size() - 1 && tokenList.get(tknIndex + 1).getLexeme().equals("=")) {
-            if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("{")) {
-                tokenType = TokenType.IDENTIFICADOR_CONJUNTO;
-            } else if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("(")) {
-                // tokenType = TokenType.IDENTIFICADOR_TUPLA;
-                tokenType = TokenType.IDENTIFICADOR;
-            } else if (tknIndex < tokenList.size() - 2 && tokenList.get(tknIndex + 2).getLexeme().equals("[")) {
-                tokenType = TokenType.IDENTIFICADOR_LISTA;
+            if (tknIndex < tokenList.size() - 2) {
+                String nextLexeme = tokenList.get(tknIndex + 2).getLexeme();
+                if (nextLexeme.equals("{")) {
+                    tokenType = TokenType.IDENTIFICADOR_CONJUNTO;
+                } else if (nextLexeme.equals("(")) {
+                    tokenType = TokenType.IDENTIFICADOR;
+                } else if (nextLexeme.equals("[")) {
+                    tokenType = TokenType.IDENTIFICADOR_LISTA;
+                } else if (tokenList.get(tknIndex + 2).getRow() == tokenList.get(tknIndex + 1).getRow()) {  // Verifica que haya un valor válido después del '='
+                    tokenType = TokenType.IDENTIFICADOR;
+                } else {
+                    tokenType = TokenType.DESCONOCIDO;  // No hay valor después del '='
+                }
+                variableNames.add(lexeme);
+                val = !val;
             } else {
-                tokenType = TokenType.IDENTIFICADOR;
+                tokenType = TokenType.DESCONOCIDO;  // No hay tokens después del '='
             }
-            variableNames.add(lexeme);
-            val = !val;
         } else if (variableNames.contains(lexeme)) {
             tokenType = TokenType.IDENTIFICADOR;
             val = !val;
         }
+    
         return val;
     }
+    
 
     /**
      * Este método compara los valores anteriores o posteriores de un token en
