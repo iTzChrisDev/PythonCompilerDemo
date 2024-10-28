@@ -33,12 +33,8 @@ public class Assignments {
                     if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
                         tool.incrementIndex();
                     }
-                } else if (isStringConcat()) {
-                    flag = true;
-                    if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
-                        tool.incrementIndex();
-                    }
-                } else {
+                }
+                else {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         flag = true;
                         // System.out.println("VARIABLE DECLARADA");
@@ -98,26 +94,6 @@ public class Assignments {
         return flag;
     }
 
-    public boolean isStringConcat() {
-        boolean flag = false;
-        Token tkn = tool.getCurrentToken();
-        if (tool.verifyToken(TokenType.CADENA) || tool.verifyToken(TokenType.IDENTIFICADOR)) {
-            tool.incrementIndex();
-            if (tool.verifyToken(TokenType.SUMA)) {
-                tool.incrementIndex();
-                isStringConcat();
-            } else {
-                if (tool.getCurrentToken().getRow() == tkn.getRow()) {
-                    tool.showError("No se reconoce la expresión");
-                    flag = false;
-                } else {
-                    flag = true;
-                }
-            }
-        }
-        return flag;
-    }
-
     public boolean isFactor() {
         boolean flag = false;
         // System.out.println(tool.getCurrentToken().getLexeme());
@@ -153,7 +129,7 @@ public class Assignments {
             while (tool.verifyToken(TokenType.SUMA) || tool.verifyToken(TokenType.RESTA)) {
                 tool.incrementIndex(); // Avanzar el operador
                 if (!isTerm()) {
-                    tool.showError("[EXP] Se esperaba un término después del operador aritmético");
+                    //tool.showError("[EXP] Se esperaba un término después del operador aritmético");
                     flag = false;
                     break;
                 }

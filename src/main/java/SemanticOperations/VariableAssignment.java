@@ -236,10 +236,24 @@ public class VariableAssignment {
                             }
                         }
                     }
-                    State state = (!expression.isBlank()) ? State.ASIGNADO : State.NO_ASIGNADO;
-                    variables.add(new Variable(currentToken.getLexeme(), TokenType.NONE, expression,
-                            currentToken.getRow(), state));
+
+                    boolean flag = true;
+                    for (Variable var : variables) {
+                        if (var.getVarName().equals(currentToken.getLexeme())) {
+                            var.setValue(expression);
+                            flag = false;
+                            break;
+                        }
+                    }
+
+                    if (flag) {
+                        State state = (!expression.isBlank()) ? State.ASIGNADO : State.NO_ASIGNADO;
+                        variables.add(new Variable(currentToken.getLexeme(), TokenType.NONE, expression,
+                                currentToken.getRow(), state));
+                        flag = true;
+                    }
                     expression = "";
+
                 }
             } catch (IndexOutOfBoundsException e) {
             }

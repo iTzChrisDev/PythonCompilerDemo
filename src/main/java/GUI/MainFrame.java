@@ -47,7 +47,7 @@ public class MainFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlMain = new javax.swing.JPanel();
@@ -59,6 +59,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnBasico = new GUI.CustomComponents.Button();
         btnCompleto = new GUI.CustomComponents.Button();
+        btnVars = new GUI.CustomComponents.Button();
         btnIF = new GUI.CustomComponents.Button();
         btnFOR = new GUI.CustomComponents.Button();
         btnWHILE = new GUI.CustomComponents.Button();
@@ -121,8 +122,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         btnClear.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnClear.setForeground(new java.awt.Color(255, 255, 255));
-        btnClear.setIcon(new javax.swing.ImageIcon(
-                "C:\\Users\\iTzChrisDev\\Documents\\GitHub\\PythonCompilerDemo\\src\\main\\java\\Resources\\clear.png")); // NOI18N
+        btnClear.setIcon(new javax.swing.ImageIcon("C:\\Users\\iTzChrisDev\\Documents\\GitHub\\PythonCompilerDemo\\src\\main\\java\\Resources\\clear.png")); // NOI18N
         btnClear.setText("Clear");
         btnClear.setBorderColor(new java.awt.Color(102, 102, 102));
         btnClear.setColor(new java.awt.Color(102, 102, 102));
@@ -174,6 +174,22 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnCompleto);
+
+        btnVars.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        btnVars.setForeground(new java.awt.Color(255, 255, 255));
+        btnVars.setText("Variables");
+        btnVars.setBorderColor(new java.awt.Color(248, 59, 59));
+        btnVars.setColor(new java.awt.Color(248, 59, 59));
+        btnVars.setColorClick(new java.awt.Color(160, 20, 20));
+        btnVars.setColorOver(new java.awt.Color(255, 96, 96));
+        btnVars.setFont(new java.awt.Font("Roboto", 1, 16)); // NOI18N
+        btnVars.setRadius(15);
+        btnVars.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVarsActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVars);
 
         btnIF.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnIF.setForeground(new java.awt.Color(255, 255, 255));
@@ -257,12 +273,13 @@ public class MainFrame extends javax.swing.JFrame {
         tableTokens.setBackground(new java.awt.Color(23, 21, 23));
         tableTokens.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         tableTokens.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                        { null, null, null, null }
-                },
-                new String[] {
-                        "Lexema", "Token", "Fila", "Columna"
-                }));
+            new Object [][] {
+                {null, null, null, null}
+            },
+            new String [] {
+                "Lexema", "Token", "Fila", "Columna"
+            }
+        ));
         tableTokens.setEnabled(false);
         scrollTokens.setViewportView(tableTokens);
 
@@ -274,7 +291,7 @@ public class MainFrame extends javax.swing.JFrame {
         pnlSemantic.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         pnlSemantic.setPreferredSize(new java.awt.Dimension(200, 220));
         pnlSemantic.setRound(10);
-        pnlSemantic.setLayout(new java.awt.GridLayout());
+        pnlSemantic.setLayout(new java.awt.GridLayout(1, 0));
 
         scrollVariables.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(40, 137, 199)));
         scrollVariables.setPreferredSize(new java.awt.Dimension(452, 200));
@@ -282,12 +299,13 @@ public class MainFrame extends javax.swing.JFrame {
         tableVariables.setBackground(new java.awt.Color(23, 21, 23));
         tableVariables.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         tableVariables.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
-                        { null, null, null, null, null }
-                },
-                new String[] {
-                        "Variable", "Tipo", "Valor", "Estado", "Fila"
-                }));
+            new Object [][] {
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Variable", "Tipo", "Valor", "Estado", "Fila"
+            }
+        ));
         tableVariables.setEnabled(false);
         scrollVariables.setViewportView(tableVariables);
 
@@ -350,14 +368,24 @@ public class MainFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVarsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVarsActionPerformed
+        File file = new File("./src/main/java/Files/TestFiles/variables.py");
+        FileManager fm = new FileManager(file);
+        fm.cargarArchivo(txtCode);
+        tbModel.setRowCount(0);
+        jLabel1.setText("Output - " + file.getName());
+    }//GEN-LAST:event_btnVarsActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnClearActionPerformed
         txtCode.setText("");
@@ -567,6 +595,7 @@ public class MainFrame extends javax.swing.JFrame {
     private GUI.CustomComponents.Button btnIF;
     private GUI.CustomComponents.Button btnOpenFile;
     private GUI.CustomComponents.Button btnSWITCH;
+    private GUI.CustomComponents.Button btnVars;
     private GUI.CustomComponents.Button btnWHILE;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
