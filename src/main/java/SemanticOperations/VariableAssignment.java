@@ -20,6 +20,7 @@ public class VariableAssignment {
     private ConditionalCheck conditions;
     private JTextArea console;
     private Utilities tool;
+    private int rowStringError;
 
     public VariableAssignment(JTextArea console, ArrayList<Token> tokenList) {
         this.tokenList = tokenList;
@@ -171,7 +172,7 @@ public class VariableAssignment {
         for (Variable variable : variables) {
             if (variable.getType() == TokenType.CADENA) {
                 ArrayList<String> row = splitExpression(variable.getValue());
-
+                rowStringError = variable.getRow();
                 for (String item : row) {
                     if (item.equals("+")) {
                     } else if (item.equals("-") || item.equals("*") || item.equals("/")) {
@@ -209,6 +210,13 @@ public class VariableAssignment {
         }
 
         if (type == TokenType.NONE) {
+            for (Variable var : variables) {
+                if (var.getRow() == row) {
+                    var.setType(TokenType.NONE);
+                    var.setState(State.INDEFINIDO);
+                    break;
+                }
+            }
             showError("[SEMANTICO] Asignacion incorrecta", row);
         }
     }
