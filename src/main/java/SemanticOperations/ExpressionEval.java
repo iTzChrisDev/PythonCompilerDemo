@@ -27,25 +27,28 @@ public class ExpressionEval {
             }
 
             if (Character.isDigit(c) || c == '.') {
-                // Leer el número completo (incluyendo decimales)
+                // Leer el número
                 StringBuilder numero = new StringBuilder();
                 while (i < expresion.length() &&
                         (Character.isDigit(expresion.charAt(i)) || expresion.charAt(i) == '.')) {
                     numero.append(expresion.charAt(i));
                     i++;
                 }
-                operandos.push(Double.parseDouble(numero.toString())); // Empujar el número completo
+                // Agregar el número
+                operandos.push(Double.parseDouble(numero.toString()));
                 continue; // Saltar al siguiente carácter
             }
 
             if (c == '(') {
-                operadores.push(c); // Empujar paréntesis de apertura
+                // Agregar paréntesis de apertura
+                operadores.push(c);
             } else if (c == ')') {
                 // Evaluar todo hasta encontrar el paréntesis de apertura
                 while (operadores.peek() != '(') {
                     aplicarOperacion(operandos, operadores.pop());
                 }
-                operadores.pop(); // Eliminar '('
+                // Eliminar '('
+                operadores.pop();
             } else if (esOperador(c)) {
                 // Procesar operadores con mayor o igual precedencia
                 while (!operadores.isEmpty() &&
@@ -53,7 +56,8 @@ public class ExpressionEval {
                         precedencia(operadores.peek()) >= precedencia(c)) {
                     aplicarOperacion(operandos, operadores.pop());
                 }
-                operadores.push(c); // Empujar el operador actual
+                // Agregar el operador actual
+                operadores.push(c);
             }
             i++;
         }
@@ -63,7 +67,8 @@ public class ExpressionEval {
             aplicarOperacion(operandos, operadores.pop());
         }
 
-        return operandos.pop(); // El resultado final
+        // El resultado final
+        return operandos.pop();
     }
 
     // Aplica una operación usando los operandos de la pila
@@ -76,15 +81,15 @@ public class ExpressionEval {
             case '*' -> operandos.push(a * b);
             case '/' -> {
                 if (b == 0) {
-                    showError("División por cero"); // Muestra el error
-                    throw new IllegalArgumentException("División por cero"); // Lanza la excepción
+                    showError("[SEMANTICO] División por cero");
+                    throw new IllegalArgumentException("División por cero");
                 }
                 operandos.push(a / b); // Solo se ejecuta si b no es 0
 
             }
             default -> {
-                showError("Operador no soportado: " + operador); // Muestra el mensaje de error
-                throw new IllegalArgumentException("Operador no soportado: " + operador); // Lanza la excepción
+                showError("[SEMANTICO] Operador no soportado: " + operador);
+                throw new IllegalArgumentException("Operador no soportado: " + operador);
             }
 
         }

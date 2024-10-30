@@ -40,7 +40,7 @@ public class ConditionalCheck {
             int row = Integer.parseInt(String.valueOf(entry.getKey().toCharArray()[0]));
             TokenType tkn1 = entry.getValue().get(0).getToken();
             TokenType tkn2 = entry.getValue().get(2).getToken();
-        
+
             if (tkn1.equals(TokenType.IDENTIFICADOR)) {
                 for (Variable var : VariableAssignment.variables) {
                     if (var.getVarName().equals(entry.getValue().get(0).getLexeme())) {
@@ -49,7 +49,7 @@ public class ConditionalCheck {
                     }
                 }
             }
-        
+
             if (tkn2.equals(TokenType.IDENTIFICADOR)) {
                 for (Variable var : VariableAssignment.variables) {
                     if (var.getVarName().equals(entry.getValue().get(2).getLexeme())) {
@@ -58,11 +58,14 @@ public class ConditionalCheck {
                     }
                 }
             }
-        
-            if (!tkn1.equals(tkn2)) {
+
+            if ((tkn1 == TokenType.ENTERO || tkn1 == TokenType.DECIMAL) &&
+                    (tkn2 == TokenType.ENTERO || tkn2 == TokenType.DECIMAL)) {
+            } else if (!tkn1.equals(tkn2)) {
                 showError("[SEMANTICO] Comparación entre diferentes tipos", row);
             }
-        }        
+
+        }
     }
 
     private void showError(String errorMessage, int row) {

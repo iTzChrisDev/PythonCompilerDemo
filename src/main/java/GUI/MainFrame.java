@@ -417,8 +417,6 @@ public class MainFrame extends javax.swing.JFrame {
             parser.parseCode();
 
             // ANALIZADOR SEMANTICO
-            // var = new VariableCheck(lexer.getTokenList(), txtConsole);
-            // var.check();
             semantic = new VariableAssignment(txtConsole, lexer.getTokenList());
             semantic.analizeSemantic();
             fillVar();

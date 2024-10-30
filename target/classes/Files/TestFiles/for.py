@@ -1,3 +1,3 @@
 class for_statement:
-    for i in range(150):
+    for i in range(12):
         print("El valor es: ", i)

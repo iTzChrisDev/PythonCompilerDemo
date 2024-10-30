@@ -20,7 +20,6 @@ public class VariableAssignment {
     private ConditionalCheck conditions;
     private JTextArea console;
     private Utilities tool;
-    private int rowStringError;
 
     public VariableAssignment(JTextArea console, ArrayList<Token> tokenList) {
         this.tokenList = tokenList;
@@ -34,6 +33,7 @@ public class VariableAssignment {
         checkVars();
         evalExpressions();
         evalComplexExpressions();
+        checkForIdentifier();
         conditions.check();
 
         for (Token token : getLastTokensByRow(tool.getTokenList())) {
@@ -44,11 +44,72 @@ public class VariableAssignment {
                     if (var.getRow() == token.getRow()) {
                         var.setState(State.INDEFINIDO);
                         var.setType(TokenType.NONE);
-                        var.setValue("null");
                     }
                 }
             }
         }
+    }
+
+    public void checkForIdentifier() {
+        boolean flag = false;
+        String name = "";
+        String value = "";
+        int row = 0;
+        State state = State.INDEFINIDO;
+        TokenType type = TokenType.NONE;
+
+        ArrayList<Token> rowFound = new ArrayList<>();
+
+        for (Token token : tokenList) {
+            if (token.getToken().equals(TokenType.FOR)) {
+                flag = true;
+                row = token.getRow();
+            }
+
+            if (flag) {
+                rowFound.add(token);
+                if (token.getToken().equals(TokenType.DOS_PUNTOS)) {
+                    break;
+                }
+            }
+        }
+
+        boolean identifierFound = false;
+
+        for (int i = 0; i < rowFound.size(); i++) {
+            Token token = rowFound.get(i);
+
+            if (token.getToken().equals(TokenType.IDENTIFICADOR)) {
+                name = token.getLexeme();
+                type = TokenType.ITERADOR;
+                identifierFound = true;
+            }
+
+            if (token.getToken().equals(TokenType.PARENTESIS_APERTURA) && i + 1 < rowFound.size()) {
+                if (rowFound.get(i + 1).getToken().equals(TokenType.ENTERO)) {
+                    value = rowFound.get(i + 1).getLexeme();
+                    state = State.ASIGNADO;
+                } else {
+                    identifierFound = false;
+                }
+
+                if (i + 3 < rowFound.size() && rowFound.get(i + 2).getToken().equals(TokenType.COMA)) {
+                    if (rowFound.get(i + 3).getToken().equals(TokenType.ENTERO)) {
+                        value += " - " + rowFound.get(i + 3).getLexeme();
+                    } else {
+                        identifierFound = false;
+                    }
+                }
+            }
+        }
+
+        if (!identifierFound) {
+            value = "¿?";
+            type = TokenType.NONE;
+            state = State.INDEFINIDO;
+        }
+
+        variables.add(new Variable(name, type, value, row, state));
     }
 
     public static ArrayList<Token> getLastTokensByRow(List<Token> tokens) {
@@ -74,7 +135,6 @@ public class VariableAssignment {
                     }
 
                 } catch (IllegalArgumentException | EmptyStackException e) {
-                    System.err.println("Error en la expresión: " + e.getMessage());
                     var.setState(State.INDEFINIDO);
                     var.setType(TokenType.NONE);
                 }
@@ -172,10 +232,16 @@ public class VariableAssignment {
         for (Variable variable : variables) {
             if (variable.getType() == TokenType.CADENA) {
                 ArrayList<String> row = splitExpression(variable.getValue());
-                rowStringError = variable.getRow();
                 for (String item : row) {
                     if (item.equals("+")) {
                     } else if (item.equals("-") || item.equals("*") || item.equals("/")) {
+                        for (Variable var : variables) {
+                            if (var.getRow() == variable.getRow()) {
+                                var.setType(TokenType.NONE);
+                                var.setState(State.INDEFINIDO);
+                                break;
+                            }
+                        }
                         showError("[SEMANTICO] Concatenación incorrecta", variable.getRow());
                     }
                 }
@@ -329,7 +395,7 @@ public class VariableAssignment {
                     }
 
                     if (flag) {
-                        State state = (!expression.isBlank()) ? State.ASIGNADO : State.NO_ASIGNADO;
+                        State state = (!expression.isBlank()) ? State.ASIGNADO : State.INDEFINIDO;
                         variables.add(new Variable(currentToken.getLexeme(), TokenType.NONE, expression,
                                 currentToken.getRow(), state));
                         flag = true;

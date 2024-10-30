@@ -123,57 +123,86 @@ public class CompoundStatements {
 
     public boolean isForStatement() {
         boolean flag = false;
+
         if (tool.verifyToken(TokenType.FOR)) {
             tool.incrementIndex();
+
             if (tool.verifyToken(TokenType.IDENTIFICADOR)) {
                 tool.incrementIndex();
+
                 if (tool.verifyToken(TokenType.IN)) {
                     tool.incrementIndex();
+
                     if (tool.verifyToken(TokenType.RANGE)) {
                         tool.incrementIndex();
+
                         if (tool.verifyToken(TokenType.PARENTESIS_APERTURA)) {
                             tool.incrementIndex();
+
                             if (tool.verifyToken(TokenType.ENTERO)) {
                                 tool.incrementIndex();
+
+                                if (tool.verifyToken(TokenType.COMA)) {
+                                    tool.incrementIndex();
+
+                                    if (tool.verifyToken(TokenType.ENTERO)) {
+                                        tool.incrementIndex();
+                                    } else {
+                                        tool.showError("Se esperaba un segundo valor entero");
+                                        return false;
+                                    }
+                                }
+
                                 if (tool.verifyToken(TokenType.PARENTESIS_CIERRE)) {
                                     tool.incrementIndex();
+
                                     if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                                        // FIN DEL ARBOL SINTACTICO
                                         flag = true;
                                         tool.incrementIndex();
-                                        // System.out.println("FOR CORRECTO");
                                     } else {
-                                        tool.showError("Se esperaban ':'");
+                                        tool.showError("Se esperaba ':'");
+                                        return false;
                                     }
                                 } else {
-                                    tool.showError("Se esperaban ')'");
+                                    tool.showError("Se esperaba ')'");
+                                    return false;
                                 }
                             } else {
-                                tool.showError("Se esperaban valor iterable");
+                                tool.showError("Se esperaba un valor entero");
+                                return false;
                             }
                         } else {
-                            tool.showError("Se esperaban '('");
+                            tool.showError("Se esperaba '('");
+                            return false;
                         }
-                    } else if (tool.verifyToken(TokenType.CADENA) || tool.verifyToken(TokenType.IDENTIFICADOR_CONJUNTO)
-                            || tool.verifyToken(TokenType.IDENTIFICADOR_LISTA)
-                            || tool.verifyToken(TokenType.IDENTIFICADOR_TUPLA)) {
+                    } else if (tool.verifyToken(TokenType.CADENA) ||
+                            tool.verifyToken(TokenType.IDENTIFICADOR_CONJUNTO) ||
+                            tool.verifyToken(TokenType.IDENTIFICADOR_LISTA) ||
+                            tool.verifyToken(TokenType.IDENTIFICADOR_TUPLA)) {
                         tool.incrementIndex();
+
                         if (tool.verifyToken(TokenType.DOS_PUNTOS)) {
-                            // FIN DEL ARBOL SINTACTICO
                             flag = true;
                             tool.incrementIndex();
                             System.out.println("FOR (LISTA, TUPLA, CADENA, CONJUNTO) CORRECTO");
+                        } else {
+                            tool.showError("Se esperaba ':'");
+                            return false;
                         }
                     } else {
-                        tool.showError("Se esperaban expresión");
+                        tool.showError("Se esperaba una expresión válida");
+                        return false;
                     }
                 } else {
-                    tool.showError("Se esperaban palabra reservada");
+                    tool.showError("Se esperaba 'IN'");
+                    return false;
                 }
             } else {
-                tool.showError("Se esperaban iterador");
+                tool.showError("Se esperaba un iterador");
+                return false;
             }
         }
+
         return flag;
     }
 

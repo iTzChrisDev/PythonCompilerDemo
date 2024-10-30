@@ -37,7 +37,6 @@ public class Assignments {
                 else {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         flag = true;
-                        // System.out.println("VARIABLE DECLARADA");
                         tool.incrementIndex();
                         if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
                             tool.incrementIndex();
