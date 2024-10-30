@@ -95,7 +95,7 @@ public class VariableAssignment {
 
             if (token.getToken().equals(TokenType.PARENTESIS_APERTURA) && i + 1 < rowFound.size()) {
                 if (rowFound.get(i + 1).getToken().equals(TokenType.ENTERO)) {
-                    value = rowFound.get(i + 1).getLexeme();
+                    value = "0 - " + rowFound.get(i + 1).getLexeme();
                     state = State.ASIGNADO;
                 } else {
                     identifierFound = false;
@@ -103,7 +103,7 @@ public class VariableAssignment {
 
                 if (i + 3 < rowFound.size() && rowFound.get(i + 2).getToken().equals(TokenType.COMA)) {
                     if (rowFound.get(i + 3).getToken().equals(TokenType.ENTERO)) {
-                        value += " - " + rowFound.get(i + 3).getLexeme();
+                        value = rowFound.get(i + 1).getLexeme() + " - " + rowFound.get(i + 3).getLexeme();
                     } else {
                         identifierFound = false;
                     }
