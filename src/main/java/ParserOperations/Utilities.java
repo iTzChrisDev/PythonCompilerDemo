@@ -61,6 +61,23 @@ public class Utilities {
                 || tkn.getToken().equals(TokenType.DIFERENCIA);
     }
 
+    protected static boolean isStringIdentifier() {
+        boolean flag = false;
+        int row = tokenList.get(index).getRow();
+        ArrayList<Token> rowFound = new ArrayList<>();
+        for (Token token : tokenList) {
+            if (token.getRow() == row) {
+                rowFound.add(token);
+            }
+        }
+        for (Token token : rowFound) {
+            if (token.getToken().equals(TokenType.CADENA)) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
     protected static int getCurrentIndent() {
         return currentIndent;
     }

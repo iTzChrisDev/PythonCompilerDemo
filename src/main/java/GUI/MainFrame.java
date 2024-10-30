@@ -175,6 +175,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel1.add(btnCompleto);
 
+        btnVars.setBackground(new java.awt.Color(248, 59, 59));
         btnVars.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnVars.setForeground(new java.awt.Color(255, 255, 255));
         btnVars.setText("Variables");
@@ -194,10 +195,10 @@ public class MainFrame extends javax.swing.JFrame {
         btnIF.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnIF.setForeground(new java.awt.Color(255, 255, 255));
         btnIF.setText("IF");
-        btnIF.setBorderColor(new java.awt.Color(248, 59, 59));
-        btnIF.setColor(new java.awt.Color(248, 59, 59));
-        btnIF.setColorClick(new java.awt.Color(160, 20, 20));
-        btnIF.setColorOver(new java.awt.Color(255, 96, 96));
+        btnIF.setBorderColor(new java.awt.Color(21, 128, 79));
+        btnIF.setColor(new java.awt.Color(21, 128, 79));
+        btnIF.setColorClick(new java.awt.Color(21, 111, 79));
+        btnIF.setColorOver(new java.awt.Color(14, 139, 78));
         btnIF.setFont(new java.awt.Font("Roboto", 1, 16)); // NOI18N
         btnIF.setRadius(15);
         btnIF.addActionListener(new java.awt.event.ActionListener() {
@@ -210,10 +211,10 @@ public class MainFrame extends javax.swing.JFrame {
         btnFOR.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnFOR.setForeground(new java.awt.Color(255, 255, 255));
         btnFOR.setText("FOR");
-        btnFOR.setBorderColor(new java.awt.Color(248, 59, 59));
-        btnFOR.setColor(new java.awt.Color(248, 59, 59));
-        btnFOR.setColorClick(new java.awt.Color(160, 20, 20));
-        btnFOR.setColorOver(new java.awt.Color(255, 96, 96));
+        btnFOR.setBorderColor(new java.awt.Color(21, 128, 79));
+        btnFOR.setColor(new java.awt.Color(21, 128, 79));
+        btnFOR.setColorClick(new java.awt.Color(21, 111, 79));
+        btnFOR.setColorOver(new java.awt.Color(14, 139, 78));
         btnFOR.setFont(new java.awt.Font("Roboto", 1, 16)); // NOI18N
         btnFOR.setRadius(15);
         btnFOR.addActionListener(new java.awt.event.ActionListener() {
@@ -226,10 +227,10 @@ public class MainFrame extends javax.swing.JFrame {
         btnWHILE.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnWHILE.setForeground(new java.awt.Color(255, 255, 255));
         btnWHILE.setText("WHILE");
-        btnWHILE.setBorderColor(new java.awt.Color(248, 59, 59));
-        btnWHILE.setColor(new java.awt.Color(248, 59, 59));
-        btnWHILE.setColorClick(new java.awt.Color(160, 20, 20));
-        btnWHILE.setColorOver(new java.awt.Color(255, 96, 96));
+        btnWHILE.setBorderColor(new java.awt.Color(21, 128, 79));
+        btnWHILE.setColor(new java.awt.Color(21, 128, 79));
+        btnWHILE.setColorClick(new java.awt.Color(21, 111, 79));
+        btnWHILE.setColorOver(new java.awt.Color(14, 139, 78));
         btnWHILE.setFont(new java.awt.Font("Roboto", 1, 16)); // NOI18N
         btnWHILE.setRadius(15);
         btnWHILE.addActionListener(new java.awt.event.ActionListener() {
@@ -242,10 +243,10 @@ public class MainFrame extends javax.swing.JFrame {
         btnSWITCH.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btnSWITCH.setForeground(new java.awt.Color(255, 255, 255));
         btnSWITCH.setText("SWITCH");
-        btnSWITCH.setBorderColor(new java.awt.Color(248, 59, 59));
-        btnSWITCH.setColor(new java.awt.Color(248, 59, 59));
-        btnSWITCH.setColorClick(new java.awt.Color(160, 20, 20));
-        btnSWITCH.setColorOver(new java.awt.Color(255, 96, 96));
+        btnSWITCH.setBorderColor(new java.awt.Color(21, 128, 79));
+        btnSWITCH.setColor(new java.awt.Color(21, 128, 79));
+        btnSWITCH.setColorClick(new java.awt.Color(21, 111, 79));
+        btnSWITCH.setColorOver(new java.awt.Color(14, 139, 78));
         btnSWITCH.setFont(new java.awt.Font("Roboto", 1, 16)); // NOI18N
         btnSWITCH.setRadius(15);
         btnSWITCH.addActionListener(new java.awt.event.ActionListener() {

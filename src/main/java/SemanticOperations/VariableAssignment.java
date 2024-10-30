@@ -48,6 +48,14 @@ public class VariableAssignment {
                 }
             }
         }
+
+        // Limpiar valores bug de la fila 0
+        ArrayList<Variable> aux = new ArrayList<>(variables);
+        for (Variable var : aux) {
+            if (var.getRow() == 0) {
+                variables.remove(var);
+            }
+        }
     }
 
     public void checkForIdentifier() {

@@ -248,6 +248,9 @@
                 </Component>
                 <Component class="GUI.CustomComponents.Button" name="btnVars">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                    </Property>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                         <EmptyBorder bottom="5" left="10" right="10" top="5"/>
@@ -290,16 +293,16 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="IF"/>
                     <Property name="borderColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="color" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorClick" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="14" green="14" red="a0" type="rgb"/>
+                      <Color blue="4f" green="6f" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="60" green="60" red="ff" type="rgb"/>
+                      <Color blue="4e" green="8b" red="e" type="rgb"/>
                     </Property>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="16" style="1"/>
@@ -322,16 +325,16 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="FOR"/>
                     <Property name="borderColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="color" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorClick" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="14" green="14" red="a0" type="rgb"/>
+                      <Color blue="4f" green="6f" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="60" green="60" red="ff" type="rgb"/>
+                      <Color blue="4e" green="8b" red="e" type="rgb"/>
                     </Property>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="16" style="1"/>
@@ -354,16 +357,16 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="WHILE"/>
                     <Property name="borderColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="color" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorClick" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="14" green="14" red="a0" type="rgb"/>
+                      <Color blue="4f" green="6f" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="60" green="60" red="ff" type="rgb"/>
+                      <Color blue="4e" green="8b" red="e" type="rgb"/>
                     </Property>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="16" style="1"/>
@@ -386,16 +389,16 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="SWITCH"/>
                     <Property name="borderColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="color" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="3b" green="3b" red="f8" type="rgb"/>
+                      <Color blue="4f" green="80" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorClick" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="14" green="14" red="a0" type="rgb"/>
+                      <Color blue="4f" green="6f" red="15" type="rgb"/>
                     </Property>
                     <Property name="colorOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="60" green="60" red="ff" type="rgb"/>
+                      <Color blue="4e" green="8b" red="e" type="rgb"/>
                     </Property>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Roboto" size="16" style="1"/>

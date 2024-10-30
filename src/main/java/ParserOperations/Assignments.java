@@ -33,8 +33,7 @@ public class Assignments {
                     if (tool.verifyToken(TokenType.PUNTO_Y_COMA)) {
                         tool.incrementIndex();
                     }
-                }
-                else {
+                } else {
                     if (tool.isValueToken(tool.getCurrentToken())) {
                         flag = true;
                         tool.incrementIndex();
@@ -121,17 +120,42 @@ public class Assignments {
 
     public boolean isExpression() {
         boolean flag = false;
-        // Verificar el primer término
-        if (isTerm()) {
+        // Verificar si es concatenación de cadenas primero
+        if (tool.isStringIdentifier()) {
+            if (tool.verifyToken(TokenType.CADENA) || tool.verifyToken(TokenType.IDENTIFICADOR)) {
+                if (isStringConcatenation()) {
+                    flag = true;
+                }
+            }
+        }
+        // Verificar el primer término en caso de ser aritmético
+        else if (isTerm()) {
             flag = true;
-            // Verificar operadores de suma o resta
+            // Verificar operadores de suma o resta para términos aritméticos
             while (tool.verifyToken(TokenType.SUMA) || tool.verifyToken(TokenType.RESTA)) {
-                tool.incrementIndex(); // Avanzar el operador
+                tool.incrementIndex();
                 if (!isTerm()) {
-                    //tool.showError("[EXP] Se esperaba un término después del operador aritmético");
                     flag = false;
                     break;
                 }
+            }
+        }
+        return flag;
+    }
+
+    public boolean isStringConcatenation() {
+        boolean flag = false;
+        if (tool.verifyToken(TokenType.CADENA) || tool.verifyToken(TokenType.IDENTIFICADOR)) {
+            tool.incrementIndex();
+            flag = true;
+            while (tool.verifyToken(TokenType.SUMA)) {
+                tool.incrementIndex();
+                if (!(tool.verifyToken(TokenType.CADENA) || tool.verifyToken(TokenType.IDENTIFICADOR))) {
+                    tool.showError("Se esperaba cadena o identificador en concatenación");
+                    flag = false;
+                    break;
+                }
+                tool.incrementIndex();
             }
         }
         return flag;
