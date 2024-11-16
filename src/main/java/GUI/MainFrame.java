@@ -19,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import Files.Compiler;
+import java.awt.Color;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -28,6 +30,7 @@ public class MainFrame extends javax.swing.JFrame {
     private Parser parser;
     // private VariableCheck var;
     private VariableAssignment semantic;
+    private Compiler compiler;
 
     public MainFrame() {
         initComponents();
@@ -421,6 +424,14 @@ public class MainFrame extends javax.swing.JFrame {
             semantic = new VariableAssignment(txtConsole, lexer.getTokenList());
             semantic.analizeSemantic();
             fillVar();
+
+            if (txtConsole.getText().isBlank()) {
+                txtConsole.setForeground(Color.GREEN);
+                compiler = new Compiler(txtCode.getText(), txtConsole);
+                compiler.compileCode();
+            } else {
+                txtConsole.setForeground(new Color(255, 96, 96));
+            }
         } else {
             jLabel1.setText("Output");
             JOptionPane.showMessageDialog(null, "No hay código en el editor", "Atención!",
@@ -485,7 +496,7 @@ public class MainFrame extends javax.swing.JFrame {
         tbModel.addColumn("Columna");
 
         for (Token lex : lexer.getTokenList()) {
-            tbModel.addRow(new Object[] { lex.getLexeme(), lex.getToken(), lex.getRow(), lex.getColumn() });
+            tbModel.addRow(new Object[]{lex.getLexeme(), lex.getToken(), lex.getRow(), lex.getColumn()});
         }
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -521,7 +532,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         for (Variable var : semantic.getVariables()) {
             tbModel.addRow(
-                    new Object[] { var.getVarName(), var.getType(), var.getValue(), var.getState(), var.getRow() });
+                    new Object[]{var.getVarName(), var.getType(), var.getValue(), var.getState(), var.getRow()});
         }
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

@@ -1,8 +1,10 @@
 class ciclo_simple:
     cont = 12
-    while True:
-        if cont != 123:
-            print("Valido:", cont)
+    flag = True
+    while flag:
+        if cont != 100:
+            print("Invalido:", cont)
             cont += 1
         else:
-            print("Invalido:", cont)
+            print("Valido:", cont)
+            flag = False
